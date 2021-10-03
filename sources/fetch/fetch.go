@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"gophers.dev/cmds/donutdns/sources/set"
+
 	clean "github.com/hashicorp/go-cleanhttp"
 	"gophers.dev/cmds/donutdns/sources/extract"
-	"gophers.dev/cmds/donutdns/sources/set"
 	"gophers.dev/pkgs/ignore"
 	"gophers.dev/pkgs/loggy"
 )

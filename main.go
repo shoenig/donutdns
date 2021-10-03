@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/coredns/caddy"
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/coremain"
@@ -24,10 +22,9 @@ func init() {
 	dnsserver.Port = "1053"
 	dnsserver.Directives = directives
 	caddy.SetDefaultCaddyfileLoader(donutdns.PluginName, caddy.LoaderFunc(func(serverType string) (caddy.Input, error) {
-		fmt.Println("loading donutdns caddy file")
 		return caddy.CaddyfileInput{
-			Filepath:       "donutdns",
-			Contents:       []byte(".:" + dnsserver.Port + " {\ndonutdns\ndebug\nlog\n}\n"),
+			Filepath:       donutdns.PluginName,
+			Contents:       []byte(corefile),
 			ServerTypeName: "dns",
 		}, nil
 	}))
@@ -36,3 +33,13 @@ func init() {
 func main() {
 	coremain.Run()
 }
+
+const corefile = `.:1053 {
+  debug
+  log
+  donutdns {
+	allow example.com
+	block facebook.com
+	block instagram.com
+  }
+}`

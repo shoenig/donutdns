@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"gophers.dev/cmds/donutdns/sources/set"
+
 	"gophers.dev/cmds/donutdns/sources/extract"
 	"gophers.dev/cmds/donutdns/sources/fetch"
-	"gophers.dev/cmds/donutdns/sources/set"
 	"gophers.dev/pkgs/loggy"
 )
 
