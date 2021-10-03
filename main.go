@@ -1,53 +1,36 @@
 package main
 
-//import (
-//	// _ "github.com/coredns/coredns/plugin/log"
-//	_ "github.com/coredns/coredns/plugin/whoami"
-//	_ "gophers.dev/cmds/donutdns/plugins/donutdns"
-//
-//	"github.com/coredns/coredns/core/dnsserver"
-//	"github.com/coredns/coredns/coremain"
-//)
-//
-//var directives = []string{
-//	"donutdns",
-//	"whoami",
-//	"startup",
-//	"shutdown",
-//}
-//
-//func init() {
-//	dnsserver.Directives = directives
-//}
-//
-//func main() {
-//	coremain.Run()
-//}
-//
-//
-
 import (
+	"fmt"
+
+	"github.com/coredns/caddy"
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/coremain"
 	_ "github.com/coredns/coredns/plugin/debug"
 	_ "github.com/coredns/coredns/plugin/log"
-	_ "github.com/coredns/coredns/plugin/whoami"
-	_ "github.com/coredns/example"
-	_ "gophers.dev/cmds/donutdns/plugins/donutdns"
+
+	"gophers.dev/cmds/donutdns/plugins/donutdns"
 )
 
 var directives = []string{
 	"donutdns",
 	"debug",
-	"example",
 	"log",
-	"whoami",
 	"startup",
 	"shutdown",
 }
 
 func init() {
+	dnsserver.Port = "1053"
 	dnsserver.Directives = directives
+	caddy.SetDefaultCaddyfileLoader(donutdns.PluginName, caddy.LoaderFunc(func(serverType string) (caddy.Input, error) {
+		fmt.Println("loading donutdns caddy file")
+		return caddy.CaddyfileInput{
+			Filepath:       "donutdns",
+			Contents:       []byte(".:" + dnsserver.Port + " {\ndonutdns\ndebug\nlog\n}\n"),
+			ServerTypeName: "dns",
+		}, nil
+	}))
 }
 
 func main() {
