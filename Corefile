@@ -1,0 +1,5 @@
+. {
+  donutdns
+  example
+  debug
+}
