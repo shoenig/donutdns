@@ -1,13 +1,18 @@
 package main
 
 import (
+	"strconv"
+
 	"github.com/coredns/caddy"
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/coremain"
 	_ "github.com/coredns/coredns/plugin/debug"
 	_ "github.com/coredns/coredns/plugin/forward"
 	_ "github.com/coredns/coredns/plugin/log"
+	"gophers.dev/cmds/donutdns/agent"
 	"gophers.dev/cmds/donutdns/plugins/donutdns"
+	"gophers.dev/pkgs/extractors/env"
+	"gophers.dev/pkgs/loggy"
 )
 
 var directives = []string{
@@ -19,13 +24,23 @@ var directives = []string{
 	"shutdown",
 }
 
+func getCC(log loggy.Logger) *agent.CoreConfig {
+	cc := agent.ConfigFromEnv(env.OS)
+	agent.ApplyDefaults(cc)
+	cc.Log(log)
+	return cc
+}
+
 func init() {
-	dnsserver.Port = "1053"
+	log := loggy.New("init")
+	cc := getCC(log)
+
+	dnsserver.Port = strconv.Itoa(cc.Port)
 	dnsserver.Directives = directives
 	caddy.SetDefaultCaddyfileLoader(donutdns.PluginName, caddy.LoaderFunc(func(serverType string) (caddy.Input, error) {
 		return caddy.CaddyfileInput{
 			Filepath:       donutdns.PluginName,
-			Contents:       []byte(corefile),
+			Contents:       []byte(cc.Generate()),
 			ServerTypeName: "dns",
 		}, nil
 	}))
@@ -34,16 +49,3 @@ func init() {
 func main() {
 	coremain.Run()
 }
-
-const corefile = `.:1053 {
-  debug
-  log
-  donutdns {
-	allow example.com
-	block facebook.com
-	block instagram.com
-  }
-  forward . 1.1.1.1 1.0.0.1 {
-    tls_servername cloudflare-dns.com
-  }
-}`

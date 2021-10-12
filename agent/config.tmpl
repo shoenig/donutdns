@@ -1,0 +1,14 @@
+.:{{.Port}} {
+  {{if not .NoDebug}}debug{{end}}
+  {{if not .NoLog}}log{{end}}
+  donutdns {
+    defaults {{not .NoDefaults}}
+    {{range .Allows}}allow {{.}}
+    {{end}}
+    {{range .Blocks}}block {{.}}
+    {{end}}
+  }
+  forward . {{range .Forward.Addresses}}{{.}} {{end}}{
+    tls_servername {{.Forward.ServerName}}
+  }
+}

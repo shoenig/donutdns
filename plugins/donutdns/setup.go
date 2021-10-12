@@ -1,11 +1,11 @@
 package donutdns
 
 import (
-	"gophers.dev/cmds/donutdns/sources/set"
-
 	"github.com/coredns/caddy"
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/plugin"
+	"gophers.dev/cmds/donutdns/sources"
+	"gophers.dev/cmds/donutdns/sources/set"
 )
 
 func init() {
@@ -15,7 +15,7 @@ func init() {
 func setup(c *caddy.Controller) error {
 
 	dd := DonutDNS{
-		defaultLists: true,
+		defaultLists: true, // keep for logging
 		block:        set.New(),
 		allow:        set.New(),
 	}
@@ -29,6 +29,9 @@ func setup(c *caddy.Controller) error {
 					return c.ArgErr()
 				}
 				dd.defaultLists = c.Val() == "true"
+				if dd.defaultLists {
+					defaults(dd.block)
+				}
 
 			case "block":
 				if !c.NextArg() {
@@ -53,4 +56,13 @@ func setup(c *caddy.Controller) error {
 
 	// Plugin loaded okay.
 	return nil
+}
+
+func defaults(set *set.Set) {
+	getter := sources.NewGetter()
+	s, err := getter.Get(sources.Defaults())
+	if err != nil {
+		panic(err)
+	}
+	set.Union(s)
 }

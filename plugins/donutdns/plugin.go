@@ -25,20 +25,19 @@ type DonutDNS struct {
 	allow        *set.Set
 }
 
-func allow(name string) bool {
-	return name != "facebook.com."
-}
-
 func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	plog.Debugf("serve dns was called!, use default list: %t, blocks: %d, allows: %d", dd.defaultLists, dd.block.Len(), dd.allow.Len())
-
-	// todo: decide on fallthrough
 
 	state := request.Request{W: w, Req: r}
 	query := state.Name()
 
-	if allow(query) {
-		plog.Debugf("query for %s is not blocked", query)
+	if dd.allow.Has(query) {
+		plog.Debugf("query for %s is explicitly allowed", query)
+		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
+	}
+
+	if !dd.block.Has(query) {
+		plog.Debugf("query for %s is implicitly allowed", query)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 

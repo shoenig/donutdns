@@ -1,5 +1,7 @@
 package set
 
+import "strings"
+
 type nothing struct{}
 
 var null = nothing{}
@@ -26,4 +28,10 @@ func (s *Set) Union(o *Set) {
 	for k := range o.data {
 		s.data[k] = null
 	}
+}
+
+func (s *Set) Has(name string) bool {
+	clean := strings.TrimRight(name, ".")
+	_, exists := s.data[clean]
+	return exists
 }
