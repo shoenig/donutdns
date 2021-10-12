@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/coredns/coredns/plugin/pkg/log"
-	clean "github.com/hashicorp/go-cleanhttp"
 	"gophers.dev/cmds/donutdns/sources/extract"
 	"gophers.dev/cmds/donutdns/sources/set"
 	"gophers.dev/pkgs/ignore"
@@ -23,7 +22,7 @@ type fetcher struct {
 
 func New(plog log.P, ex extract.Extractor) Fetcher {
 	return &fetcher{
-		client: clean.DefaultClient(),
+		client: client(), // todo: pass in one of the upstreams
 		ex:     ex,
 		plog:   plog,
 	}
