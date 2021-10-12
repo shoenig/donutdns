@@ -5,16 +5,17 @@ import (
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/coremain"
 	_ "github.com/coredns/coredns/plugin/debug"
+	_ "github.com/coredns/coredns/plugin/forward"
 	_ "github.com/coredns/coredns/plugin/log"
-
 	"gophers.dev/cmds/donutdns/plugins/donutdns"
 )
 
 var directives = []string{
-	"donutdns",
+	"startup",
 	"debug",
 	"log",
-	"startup",
+	"donutdns",
+	"forward",
 	"shutdown",
 }
 
@@ -41,5 +42,8 @@ const corefile = `.:1053 {
 	allow example.com
 	block facebook.com
 	block instagram.com
+  }
+  forward . 1.1.1.1 1.0.0.1 {
+    tls_servername cloudflare-dns.com
   }
 }`

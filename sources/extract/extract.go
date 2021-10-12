@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"gophers.dev/cmds/donutdns/sources/set"
-
 	"gophers.dev/pkgs/loggy"
 )
 

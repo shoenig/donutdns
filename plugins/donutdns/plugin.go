@@ -4,10 +4,9 @@ import (
 	"context"
 	"net"
 
-	"github.com/coredns/coredns/request"
-
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/plugin/pkg/log"
+	"github.com/coredns/coredns/request"
 	"github.com/miekg/dns"
 	"gophers.dev/cmds/donutdns/sources/set"
 )
@@ -26,22 +25,34 @@ type DonutDNS struct {
 	allow        *set.Set
 }
 
+func allow(name string) bool {
+	return name != "facebook.com."
+}
+
 func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	plog.Debugf("serve dns was called!, use default list: %t, blocks: %d, allows: %d", dd.defaultLists, dd.block.Len(), dd.allow.Len())
 
-	// todo: respond here
+	// todo: decide on fallthrough
+
 	state := request.Request{W: w, Req: r}
-	qname := state.Name()
+	query := state.Name()
+
+	if allow(query) {
+		plog.Debugf("query for %s is not blocked", query)
+		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
+	}
+
 	var answers []dns.RR
 
-	plog.Debugf("qname: %s, qtype: %d", qname, state.QType())
+	plog.Debugf("query: %s, qtype: %d", query, state.QType())
 
 	switch state.QType() {
 	case dns.TypeA:
-		answers = dd.a(qname)
+		answers = dd.a(query)
 	case dns.TypeAAAA:
+		answers = dd.aaaa(query)
 	default:
-		plog.Debugf("not a A or AAAA record, fallthrough")
+		plog.Debugf("not an A or AAAA record, fallthrough")
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
