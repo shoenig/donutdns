@@ -6,8 +6,8 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/coredns/coredns/plugin/pkg/log"
 	"gophers.dev/pkgs/extractors/env"
-	"gophers.dev/pkgs/loggy"
 )
 
 //go:embed config.tmpl
@@ -79,18 +79,18 @@ func ConfigFromEnv(e env.Environment) *CoreConfig {
 	return &cc
 }
 
-func (cc *CoreConfig) Log(log loggy.Logger) {
-	log.Tracef("DONUT_DNS_PORT: %d", cc.Port)
-	log.Tracef("DONUT_DNS_DEBUG: %t", cc.NoDebug)
-	log.Tracef("DONUT_DNS_NO_LOG: %t", cc.NoLog)
-	log.Tracef("DONUT_DNS_NO_ALLOW: %v", cc.Allows)
-	log.Tracef("DONUT_DNS_BLOCK: %v", cc.Blocks)
-	log.Tracef("DONUT_DNS_NO_DEFAULTS: %t", cc.NoDefaults)
-	log.Tracef("DONUT_DNS_UPSTREAM_1: %s", cc.Forward.Addresses[0])
+func (cc *CoreConfig) Log(plog log.P) {
+	log.Infof("DONUT_DNS_PORT: %d", cc.Port)
+	log.Infof("DONUT_DNS_NO_DEBUG: %t", cc.NoDebug)
+	log.Infof("DONUT_DNS_NO_LOG: %t", cc.NoLog)
+	log.Infof("DONUT_DNS_ALLOW: %v", cc.Allows)
+	log.Infof("DONUT_DNS_BLOCK: %v", cc.Blocks)
+	log.Infof("DONUT_DNS_NO_DEFAULTS: %t", cc.NoDefaults)
+	log.Infof("DONUT_DNS_UPSTREAM_1: %s", cc.Forward.Addresses[0])
 	if len(cc.Forward.Addresses) == 2 {
-		log.Tracef("DONUT_DNS_UPSTREAM_2: %s", cc.Forward.Addresses[1])
+		log.Infof("DONUT_DNS_UPSTREAM_2: %s", cc.Forward.Addresses[1])
 	}
-	log.Tracef("DONUT_DNS_UPSTREAM_NAME: %s", cc.Forward.ServerName)
+	log.Infof("DONUT_DNS_UPSTREAM_NAME: %s", cc.Forward.ServerName)
 }
 
 func ApplyDefaults(cc *CoreConfig) {

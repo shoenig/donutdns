@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/coredns/coredns/plugin/pkg/log"
 	clean "github.com/hashicorp/go-cleanhttp"
 	"gophers.dev/cmds/donutdns/sources/extract"
 	"gophers.dev/cmds/donutdns/sources/set"
 	"gophers.dev/pkgs/ignore"
-	"gophers.dev/pkgs/loggy"
 )
 
 type Fetcher interface {
@@ -18,14 +18,14 @@ type Fetcher interface {
 type fetcher struct {
 	client *http.Client
 	ex     extract.Extractor
-	log    loggy.Logger
+	plog   log.P
 }
 
-func New(ex extract.Extractor) Fetcher {
+func New(plog log.P, ex extract.Extractor) Fetcher {
 	return &fetcher{
 		client: clean.DefaultClient(),
 		ex:     ex,
-		log:    loggy.New("fetch"),
+		plog:   plog,
 	}
 }
 
@@ -34,7 +34,7 @@ func (f *fetcher) Fetch(source string) (*set.Set, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
-	request.Header.Set("User-Agent", "donutDNS")
+	request.Header.Set("User-Agent", "donutdns")
 
 	response, err := f.client.Do(request)
 	if err != nil {
@@ -51,7 +51,7 @@ func (f *fetcher) Fetch(source string) (*set.Set, error) {
 		return nil, fmt.Errorf("failed to extract sources: %w", err)
 	}
 
-	f.log.Infof("got %d domains from %q", single.Len(), source)
+	f.plog.Infof("got %d domains from %q", single.Len(), source)
 
 	return single, nil
 }

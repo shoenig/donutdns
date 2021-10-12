@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/coredns/coredns/plugin/pkg/log"
 	"gophers.dev/cmds/donutdns/sources/extract"
 	"gophers.dev/cmds/donutdns/sources/fetch"
 	"gophers.dev/cmds/donutdns/sources/set"
-	"gophers.dev/pkgs/loggy"
 )
 
 //go:embed statics/sources.json
@@ -56,22 +56,22 @@ type Getter interface {
 }
 
 type getter struct {
-	log loggy.Logger
+	plog log.P
 }
 
-func NewGetter() Getter {
+func NewGetter(plog log.P) Getter {
 	return &getter{
-		log: loggy.New("getter"),
+		plog: plog,
 	}
 }
 
 func (g *getter) Get(lists *Lists) (*set.Set, error) {
-	f := fetch.New(extract.New())
+	f := fetch.New(g.plog, extract.New())
 	combo := set.New()
 	for _, source := range lists.All() {
 		single, err := f.Fetch(source)
 		if err != nil {
-			g.log.Errorf("failed to fetch source %q, skip: %s", source, err)
+			g.plog.Errorf("failed to fetch source %q, skip: %s", source, err)
 			continue
 		}
 		combo.Union(single)

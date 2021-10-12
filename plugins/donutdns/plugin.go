@@ -5,7 +5,6 @@ import (
 	"net"
 
 	"github.com/coredns/coredns/plugin"
-	"github.com/coredns/coredns/plugin/pkg/log"
 	"github.com/coredns/coredns/request"
 	"github.com/miekg/dns"
 	"gophers.dev/cmds/donutdns/sources/set"
@@ -14,8 +13,6 @@ import (
 const (
 	PluginName = "donutdns"
 )
-
-var plog = log.NewWithPlugin(PluginName)
 
 type DonutDNS struct {
 	Next plugin.Handler
@@ -43,7 +40,7 @@ func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 
 	var answers []dns.RR
 
-	plog.Debugf("query: %s, qtype: %d", query, state.QType())
+	plog.Debugf("query: %s, type: %d", query, state.QType())
 
 	switch state.QType() {
 	case dns.TypeA:
@@ -64,7 +61,7 @@ func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 		return dns.RcodeServerFailure, err
 	}
 
-	plog.Debugf("wrote response")
+	plog.Debugf("successfully blocked %s", query)
 	return dns.RcodeSuccess, nil
 }
 

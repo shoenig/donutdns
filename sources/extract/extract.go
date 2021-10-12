@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"gophers.dev/cmds/donutdns/sources/set"
-	"gophers.dev/pkgs/loggy"
 )
 
 type Extractor interface {
@@ -14,13 +13,12 @@ type Extractor interface {
 }
 
 type extractor struct {
-	log loggy.Logger
 }
 
 func New() Extractor {
-	return &extractor{
-		log: loggy.New("extract"),
-	}
+	// no logger ?
+	// mostly string manipulation
+	return &extractor{}
 }
 
 func (e *extractor) Extract(r io.Reader) (*set.Set, error) {

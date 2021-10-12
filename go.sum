@@ -791,8 +791,6 @@ gophers.dev/pkgs/extractors v0.2.3 h1:sxp3S6cGbK/akCTSV153H7Nb5OP2Jjkbv/cQ1/rmeE
 gophers.dev/pkgs/extractors v0.2.3/go.mod h1:Qx8iERgSiUqFeJDrLDJSwbGWFDI5cdFZB1wyW8UbkBU=
 gophers.dev/pkgs/ignore v0.3.0 h1:zSZqTKD3ovb4eltYSGmE1QhCDWNeazdvTSnFnkmEo9U=
 gophers.dev/pkgs/ignore v0.3.0/go.mod h1:HwTn4Fc9oicp2TxFV/8P0CswwfsVQczZvG6ZTy2TRXA=
-gophers.dev/pkgs/loggy v0.2.0 h1:RHGu/0+jWPnmjZLbE2p6sSQpc1EBPI+xAjv+Ed0IOHE=
-gophers.dev/pkgs/loggy v0.2.0/go.mod h1:koPulCjd0uOF7vTler1oyyDU/5QgA66U6kCk73rBZ6M=
 gopkg.in/DataDog/dd-trace-go.v1 v1.33.0/go.mod h1:MFdmxQL1OfAGjPrYPU02P82Z5lJ/19f4JVAvXwK1brY=
 gopkg.in/alecthomas/kingpin.v2 v2.2.6/go.mod h1:FMv+mEhP44yOT+4EoQTLFTRgOQ1FBLkstjWtayDeSgw=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=

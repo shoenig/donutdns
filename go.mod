@@ -10,5 +10,4 @@ require (
 	github.com/stretchr/testify v1.7.0
 	gophers.dev/pkgs/extractors v0.2.3
 	gophers.dev/pkgs/ignore v0.3.0
-	gophers.dev/pkgs/loggy v0.2.0
 )

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/coredns/caddy"
@@ -9,10 +10,10 @@ import (
 	_ "github.com/coredns/coredns/plugin/debug"
 	_ "github.com/coredns/coredns/plugin/forward"
 	_ "github.com/coredns/coredns/plugin/log"
+	"github.com/coredns/coredns/plugin/pkg/log"
 	"gophers.dev/cmds/donutdns/agent"
 	"gophers.dev/cmds/donutdns/plugins/donutdns"
 	"gophers.dev/pkgs/extractors/env"
-	"gophers.dev/pkgs/loggy"
 )
 
 var directives = []string{
@@ -24,16 +25,19 @@ var directives = []string{
 	"shutdown",
 }
 
-func getCC(log loggy.Logger) *agent.CoreConfig {
+var plog = log.NewWithPlugin("donutdns")
+
+func getCC() *agent.CoreConfig {
 	cc := agent.ConfigFromEnv(env.OS)
 	agent.ApplyDefaults(cc)
-	cc.Log(log)
+	cc.Log(plog)
 	return cc
 }
 
 func init() {
-	log := loggy.New("init")
-	cc := getCC(log)
+	cc := getCC()
+
+	fmt.Println(cc.Generate())
 
 	dnsserver.Port = strconv.Itoa(cc.Port)
 	dnsserver.Directives = directives
