@@ -40,28 +40,27 @@ func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 
 	var answers []dns.RR
 
-	plog.Debugf("query: %s, type: %d", query, state.QType())
-
 	switch state.QType() {
 	case dns.TypeA:
 		answers = dd.a(query)
 	case dns.TypeAAAA:
 		answers = dd.aaaa(query)
 	default:
-		plog.Debugf("not an A or AAAA record, fallthrough")
+		plog.Debugf("query: %s type: %d not an A or AAAA record, fallthrough", query, state.QType())
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
+
+	plog.Debugf("BLOCK query: %s, type: %d", query, state.QType())
 
 	m := new(dns.Msg)
 	m.SetReply(r)
 	m.Authoritative = true
 	m.Answer = answers
 	if err := w.WriteMsg(m); err != nil {
-		plog.Debugf("failed to write msg: %v", err)
+		plog.Errorf("failed to write msg: %v", err)
 		return dns.RcodeServerFailure, err
 	}
 
-	plog.Debugf("successfully blocked %s", query)
 	return dns.RcodeSuccess, nil
 }
 
