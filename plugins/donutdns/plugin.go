@@ -23,8 +23,6 @@ type DonutDNS struct {
 }
 
 func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
-	plog.Debugf("serve dns was called!, use default list: %t, blocks: %d, allows: %d", dd.defaultLists, dd.block.Len(), dd.allow.Len())
-
 	state := request.Request{W: w, Req: r}
 	query := state.Name()
 
