@@ -1,0 +1,9 @@
+# Title: hostsVN
+# =====================================================
+
+# --- Group block ---
+#[apple]
+0.0.0.0 advertising.apple.com
+0.0.0.0 weather-analytics-events.apple.com
+#[iadsdk.apple.com]
+0.0.0.0 iadsdk.apple.com

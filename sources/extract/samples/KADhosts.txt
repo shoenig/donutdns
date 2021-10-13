@@ -1,0 +1,7 @@
+# Title: KADhosts
+0.0.0.0 1slo.pl
+0.0.0.0 www.d3446vqln4dcwe.cloudfront.net
+0.0.0.0 3posilki.pl
+0.0.0.0 enuiregncxzyasdfhgasdk78c19mc9m2ihjdfsufdaf.rest
+0.0.0.0 e-wyborcza24-e.cleverapps.io
+0.0.0.0 facebook-age-verification.ssd-linuxpl.com

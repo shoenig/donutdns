@@ -1,0 +1,13 @@
+# Ads
+quantummetric.com # Cydia/Bigboss
+cydia.saurik.com.cdngc.net # Cydia/Bigboss
+production-ultimate-assets.ratecity.com.au # NewsCorp
+
+# Tracking & Telemetry
+ls.srvcs.tumblr.com # Tumblr
+deliver.oztam.com.au # ABC iView
+
+#gfwsl.geforce.com # Nvidia, interferes with logging into GeForce Experience & driver updates
+
+ctoid.net # HSTS Supercookie http://bit.ly/2xJJUPP
+api.redshell.io # https://redd.it/8pud8b

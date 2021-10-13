@@ -1,0 +1,10 @@
+127.0.0.1  localhost
+::1  localhost
+
+# [163.com]
+127.0.0.1 analytics.163.com
+
+# [adblade.com]
+127.0.0.1 adblade.com
+
+127.0.0.1 39810146b3f05dad26eec7ad4727361a.ulink.adjust.com

@@ -1,0 +1,13 @@
+################################################################
+# abuse.ch URLhaus Host file                                   #
+# Last updated: 2021-10-13 17:19:06 (UTC)                      #
+#                                                              #
+# Terms Of Use: https://urlhaus.abuse.ch/api/                  #
+# For questions please contact urlhaus [at] abuse.ch           #
+################################################################
+#
+127.0.0.1	10palmflorida.com
+127.0.0.1	1stcreditsg.qnotice.com
+127.0.0.1	2.indexsinas.me
+127.0.0.1	21gclub.com
+127.0.0.1	8402d53c-17e9-4250-8011-20f28f5d404f.certbooster.com

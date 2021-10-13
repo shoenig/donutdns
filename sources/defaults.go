@@ -66,7 +66,7 @@ func NewGetter(plog log.P) Getter {
 }
 
 func (g *getter) Get(lists *Lists) (*set.Set, error) {
-	f := fetch.New(g.plog, extract.New())
+	f := fetch.New(g.plog, extract.New(extract.Generic))
 	combo := set.New()
 	for _, source := range lists.All() {
 		single, err := f.Fetch(source)

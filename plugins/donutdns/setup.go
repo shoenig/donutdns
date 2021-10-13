@@ -86,7 +86,8 @@ func defaults(set *set.Set) {
 }
 
 func custom(filename string, set *set.Set) {
-	ex := extract.New()
+	// for now, everything uses the generic domain extractor
+	ex := extract.New(extract.Generic)
 	f, err := os.Open(filename)
 	if err != nil {
 		panic(err)
