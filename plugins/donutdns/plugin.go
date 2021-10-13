@@ -27,7 +27,7 @@ func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 	query := state.Name()
 
 	if dd.allow.Has(query) {
-		plog.Debugf("query for %s is explicitly allowed", query)
+		plog.Infof("query for %s is explicitly allowed", query)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
@@ -48,7 +48,7 @@ func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
-	plog.Debugf("BLOCK query: %s, type: %d", query, state.QType())
+	plog.Infof("BLOCK query: %s, type: %d", query, state.QType())
 
 	m := new(dns.Msg)
 	m.SetReply(r)

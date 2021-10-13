@@ -8,6 +8,8 @@ import (
 	"gophers.dev/cmds/donutdns/sources/set"
 )
 
+// todo: be able to also specify regex to parse
+
 type Extractor interface {
 	Extract(io.Reader) (*set.Set, error)
 }

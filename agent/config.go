@@ -24,6 +24,7 @@ type CoreConfig struct {
 	NoLog      bool
 	Allows     []string
 	Blocks     []string
+	BlockFile  string
 	NoDefaults bool
 	Forward    Forward
 }
@@ -56,6 +57,7 @@ func ConfigFromEnv(e env.Environment) *CoreConfig {
 		"DONUT_DNS_NO_LOG":        env.Bool(&cc.NoLog, false),
 		"DONUT_DNS_ALLOW":         env.String(&allow, false),
 		"DONUT_DNS_BLOCK":         env.String(&block, false),
+		"DONUT_DNS_BLOCK_FILE":    env.String(&cc.BlockFile, false),
 		"DONUT_DNS_NO_DEFAULTS":   env.Bool(&cc.NoDefaults, false),
 		"DONUT_DNS_UPSTREAM_1":    env.String(&upstream1, false),
 		"DONUT_DNS_UPSTREAM_2":    env.String(&upstream2, false),
@@ -85,6 +87,7 @@ func (cc *CoreConfig) Log(plog log.P) {
 	log.Infof("DONUT_DNS_NO_LOG: %t", cc.NoLog)
 	log.Infof("DONUT_DNS_ALLOW: %v", cc.Allows)
 	log.Infof("DONUT_DNS_BLOCK: %v", cc.Blocks)
+	log.Infof("DONUT_DNS_BLOCK_FILE: %s", cc.BlockFile)
 	log.Infof("DONUT_DNS_NO_DEFAULTS: %t", cc.NoDefaults)
 	log.Infof("DONUT_DNS_UPSTREAM_1: %s", cc.Forward.Addresses[0])
 	if len(cc.Forward.Addresses) == 2 {

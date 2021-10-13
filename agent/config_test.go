@@ -10,11 +10,12 @@ import (
 
 func TestCoreConfig_Generate(t *testing.T) {
 	cc := CoreConfig{
-		Port:    1053,
-		NoDebug: true,
-		NoLog:   true,
-		Allows:  []string{"example.com", "pets.com"},
-		Blocks:  []string{"facebook.com", "instagram.com"},
+		Port:      1053,
+		NoDebug:   true,
+		NoLog:     true,
+		Allows:    []string{"example.com", "pets.com"},
+		Blocks:    []string{"facebook.com", "instagram.com"},
+		BlockFile: "/etc/block.list",
 		Forward: Forward{
 			Addresses:  []string{"1.1.1.1", "1.0.0.1"},
 			ServerName: "cloudflare-dns.com",
@@ -24,10 +25,9 @@ func TestCoreConfig_Generate(t *testing.T) {
 	result := cc.Generate()
 	require.Equal(t, noWhitespace(`
 .:1053 {
-  debug
-  log
   donutdns {
     defaults true
+    block_file /etc/block.list
 
     allow example.com
     allow pets.com
@@ -60,6 +60,8 @@ func TestCoreConfig_Generate_less(t *testing.T) {
 	result := cc.Generate()
 	require.Equal(t, noWhitespace(`
 .:1054 {
+  debug
+  log
   donutdns {
     defaults false
   }
@@ -85,6 +87,7 @@ func TestConfigFromEnv(t *testing.T) {
 	mEnv.GetenvMock.When("DONUT_DNS_NO_LOG").Then("1")
 	mEnv.GetenvMock.When("DONUT_DNS_ALLOW").Then("example.com,pets.com")
 	mEnv.GetenvMock.When("DONUT_DNS_BLOCK").Then("facebook.com,reddit.com")
+	mEnv.GetenvMock.When("DONUT_DNS_BLOCK_FILE").Then("/etc/block.list")
 	mEnv.GetenvMock.When("DONUT_DNS_NO_DEFAULTS").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_UPSTREAM_1").Then("8.8.8.8")
 	mEnv.GetenvMock.When("DONUT_DNS_UPSTREAM_2").Then("8.8.4.4")
@@ -97,6 +100,7 @@ func TestConfigFromEnv(t *testing.T) {
 		NoLog:      true,
 		Allows:     []string{"example.com", "pets.com"},
 		Blocks:     []string{"facebook.com", "reddit.com"},
+		BlockFile:  "/etc/block.list",
 		NoDefaults: false,
 		Forward: Forward{
 			Addresses:  []string{"8.8.8.8", "8.8.4.4"},
@@ -114,6 +118,7 @@ func TestConfigFromEnv_2(t *testing.T) {
 	mEnv.GetenvMock.When("DONUT_DNS_NO_LOG").Then("true")
 	mEnv.GetenvMock.When("DONUT_DNS_ALLOW").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_BLOCK").Then("facebook.com")
+	mEnv.GetenvMock.When("DONUT_DNS_BLOCK_FILE").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_NO_DEFAULTS").Then("true")
 	mEnv.GetenvMock.When("DONUT_DNS_UPSTREAM_1").Then("8.8.8.8")
 	mEnv.GetenvMock.When("DONUT_DNS_UPSTREAM_2").Then("")
@@ -126,6 +131,7 @@ func TestConfigFromEnv_2(t *testing.T) {
 		NoLog:      true,
 		Allows:     nil,
 		Blocks:     []string{"facebook.com"},
+		BlockFile:  "",
 		NoDefaults: true,
 		Forward: Forward{
 			Addresses:  []string{"8.8.8.8"},
