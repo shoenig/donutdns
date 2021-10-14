@@ -91,13 +91,13 @@ func (dd DonutDNS) a(zone string) []dns.RR {
 }
 
 func (dd DonutDNS) aaaa(zone string) []dns.RR {
-	r := new(dns.A)
+	r := new(dns.AAAA)
 	r.Hdr = dns.RR_Header{
 		Name:   zone,
 		Rrtype: dns.TypeAAAA,
 		Class:  dns.ClassINET,
 		Ttl:    3600,
 	}
-	r.A = sinkAAAA
+	r.AAAA = sinkAAAA
 	return []dns.RR{r}
 }
