@@ -3,7 +3,7 @@
 Block online ads by intercepting DNS queries
 
 [![Go Report Card](https://goreportcard.com/badge/gophers.dev/cmds/donutdns)](https://goreportcard.com/report/gophers.dev/cmds/donutdns)
-[![Build Status](https://travis-ci.com/shoenig/donutdns.svg?branch=master)](https://travis-ci.com/shoenig/donutdns)
+[![Build Status](https://app.travis-ci.com/shoenig/donutdns.svg)](https://app.travis-ci.com/github/shoenig/donutdns)
 [![GoDoc](https://godoc.org/gophers.dev/cmds/donutdns?status.svg)](https://godoc.org/gophers.dev/cmds/donutdns)
 ![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/shoenig/donutdns.svg)
 ![GitHub](https://img.shields.io/github/license/shoenig/donutdns.svg)
