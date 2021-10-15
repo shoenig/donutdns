@@ -10,9 +10,12 @@ Block online ads by intercepting DNS queries
 
 ## Project Overview
 
-Module `gophers.dev/cmds/donutdns` provides a CoreDNS plugin as well as a standalone
-executable DNS server that can be used to block DNS queries to domains used by online
-advertisers, trackers, scammers, and crypto miners.
+The `gophers.dev/cmds/donutdns` module provides a [CoreDNS](https://coredns.io) plugin
+as well as a standalone executable DNS server that can be used to block DNS queries to
+domains used by online advertisers, trackers, scammers, and crypto miners. The project
+is meant to be a simpler alternative to the venerable [Pi-Hole](https://pi-hole.net). In
+particular, `donutdns` is easy to run as a **non-root** Docker container with little to
+no configuration.
 
 ## Domain Block Lists
 
@@ -37,7 +40,8 @@ to be blocked will also need to be added. (e.g. `example.com` and `www.example.c
 
 The `donutdns` executable uses environment variables for configuration.
 
-| Environment Variable | Description
+| Environment Variable | Description |
+| -------------------- | ----------- |
 | `DONUT_DNS_PORT` | The port to listen to (default `5301`) |
 | `DONUT_DNS_NO_DEBUG` | Disable CoreDNS debug logging (default unset) |
 | `DONUT_DNS_NO_LOG` | Disable CoreDNS logging (default unset) |
@@ -52,7 +56,7 @@ The `donutdns` executable uses environment variables for configuration.
 #### CoreDNS Plugin
 
 The `donutdns` CoreDNS plugin is configured using the `donutdns` block in a standard
-CoreConfig configuration file.
+[CoreConfig](https://coredns.io/manual/toc/#configuration) configuration file.
 
 Minimal `donutdns` plugin configuration. `defaults` can be set to `true` or `false`
 to enable or disable the use of default domain block lists.
