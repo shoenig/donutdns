@@ -6,7 +6,7 @@ Block online ads by intercepting DNS queries
 [![Build Status](https://app.travis-ci.com/shoenig/donutdns.svg)](https://app.travis-ci.com/github/shoenig/donutdns)
 [![GoDoc](https://godoc.org/gophers.dev/cmds/donutdns?status.svg)](https://godoc.org/gophers.dev/cmds/donutdns)
 ![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/shoenig/donutdns.svg)
-![GitHub](https://img.shields.io/github/license/shoenig/donutdns.svg)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 ## Project Overview
 
