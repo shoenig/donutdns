@@ -14,8 +14,8 @@ The `gophers.dev/cmds/donutdns` module provides a [CoreDNS](https://coredns.io) 
 as well as a standalone executable DNS server that can be used to block DNS queries to
 domains used by online advertisers, trackers, scammers, and crypto miners. The project
 is meant to be a simpler alternative to the venerable [Pi-Hole](https://pi-hole.net). In
-particular, `donutdns` is easy to run as a **non-root** Docker container with little to
-no configuration.
+particular, `donutdns` is easy to run as a **non-root** [Docker container](https://hub.docker.com/r/shoenig/donutdns)
+with little to no configuration.
 
 #### sample logs
 
