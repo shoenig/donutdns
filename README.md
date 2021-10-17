@@ -135,7 +135,7 @@ $ DONUT_DNS_PORT=5533 DONUT_DNS_NO_DEBUG=1 donutdns
 
 This will run the `donutdns` Docker container as the `nobody` user, mapping traffic from port 53. 
 ```
-docker run --rm -p 53:5301 -u nobody shoenig/donutdns:v0.1.0
+docker run --rm -p 53:5301 -u nobody shoenig/donutdns:v0.1.1
 ```
 
 #### as a Nomad job
@@ -172,7 +172,7 @@ job "donutdns" {
       }
 
       config {
-        image = "shoenig/donutdns:v0.1.0"
+        image = "shoenig/donutdns:v0.1.1"
       }
 
       template {
