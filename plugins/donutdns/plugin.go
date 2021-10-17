@@ -28,12 +28,12 @@ func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 	query := state.Name()
 
 	if dd.allow.Has(query) {
-		plog.Infof("query for %s is explicitly allowed", query)
+		pLog.Infof("query for %s is explicitly allowed", query)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
 	if !dd.block.Has(query) {
-		plog.Debugf("query for %s is implicitly allowed", query)
+		pLog.Debugf("query for %s is implicitly allowed", query)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
@@ -45,18 +45,19 @@ func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 	case dns.TypeAAAA:
 		answers = dd.aaaa(query)
 	default:
-		plog.Debugf("query: %s type: %d not an A or AAAA record, fallthrough", query, state.QType())
+		pLog.Debugf("query: %s type: %d not an A or AAAA record, fallthrough", query, state.QType())
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
-	plog.Infof("BLOCK query: %s, type: %d", query, state.QType())
+	qType := dns.Type(state.QType()).String()
+	pLog.Infof("BLOCK query (%s) for %s", qType, query)
 
 	m := new(dns.Msg)
 	m.SetReply(r)
 	m.Authoritative = true
 	m.Answer = answers
 	if err := w.WriteMsg(m); err != nil {
-		plog.Errorf("failed to write msg: %v", err)
+		pLog.Errorf("failed to write msg: %v", err)
 		return dns.RcodeServerFailure, err
 	}
 

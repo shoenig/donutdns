@@ -14,7 +14,7 @@ import (
 	"gophers.dev/pkgs/ignore"
 )
 
-var plog = log.NewWithPlugin(PluginName)
+var pLog = log.NewWithPlugin(PluginName)
 
 func init() {
 	plugin.Register(PluginName, setup)
@@ -64,8 +64,8 @@ func setup(c *caddy.Controller) error {
 		}
 	}
 
-	plog.Infof("domains on custom allow-list: %d", dd.allow.Len())
-	plog.Infof("domains on custom block-list: %d", dd.block.Len())
+	pLog.Infof("domains on custom allow-list: %d", dd.allow.Len())
+	pLog.Infof("domains on custom block-list: %d", dd.block.Len())
 
 	// Add the Plugin to CoreDNS, so Servers can use it in their plugin chain.
 	dnsserver.GetConfig(c).AddPlugin(func(next plugin.Handler) plugin.Handler {
@@ -78,7 +78,7 @@ func setup(c *caddy.Controller) error {
 }
 
 func defaults(set *set.Set) {
-	downloader := fetch.NewDownloader(plog)
+	downloader := fetch.NewDownloader(pLog)
 	s, err := downloader.Download(sources.Defaults())
 	if err != nil {
 		panic(err)
