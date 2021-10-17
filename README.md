@@ -131,11 +131,66 @@ $ DONUT_DNS_PORT=5533 DONUT_DNS_NO_DEBUG=1 donutdns
 
 #### as a docker container
 
-(todo)
+`donutdns` is available from [Docker Hub](https://hub.docker.com/repository/docker/shoenig/donutdns/general)
+
+This will run the `donutdns` Docker container as the `nobody` user, mapping traffic from port 53. 
+```
+docker run --rm -p 53:5301 -u nobody shoenig/donutdns:v0.1.0
+```
 
 #### as a Nomad job
 
-(todo)
+<details><summary>using docker driver</summary>
+  
+```hcl
+job "donutdns" {
+  datacenters = ["dc1"]
+
+  group "donut" {
+    network {
+      mode = "bridge"
+      port "dns" {
+        static       = 5533
+        to           = 5301
+        host_network = "public"
+      }
+    }
+
+    task "dns" {
+      driver = "docker"
+      user   = "nobody"
+
+      resources {
+        cpu    = 120
+        memory = 64
+        disk   = 128
+      }
+
+      env {
+        DONUT_DNS_NO_DEBUG   = 1
+        DONUT_DNS_BLOCK_FILE = "/local/blocks.txt"
+      }
+
+      config {
+        image = "shoenig/donutdns:v0.1.0"
+      }
+
+      template {
+        destination = "local/blocks.txt"
+        change_mode = "restart"
+        perms       = "644"
+        data        = <<EOH
+# [example]
+example.com
+www.example.com
+EOH
+      }
+    }
+  }
+}
+```
+  
+</details>
 
 ## Build
 
