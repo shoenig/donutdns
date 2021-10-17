@@ -17,6 +17,18 @@ is meant to be a simpler alternative to the venerable [Pi-Hole](https://pi-hole.
 particular, `donutdns` is easy to run as a **non-root** Docker container with little to
 no configuration.
 
+#### sample logs
+
+```
+[INFO] plugin/donutdns: BLOCK query (A) for www.google-analytics.com.
+[INFO] plugin/donutdns: BLOCK query (A) for www-google-analytics.l.google.com.
+[INFO] plugin/donutdns: BLOCK query (A) for stats.wp.com.
+[INFO] plugin/donutdns: BLOCK query (A) for www.googletagservices.com.
+[INFO] plugin/donutdns: BLOCK query (A) for tpc.googlesyndication.com.
+[INFO] plugin/donutdns: BLOCK query (A) for c.amazon-adsystem.com.
+[INFO] plugin/donutdns: BLOCK query (A) for static.ads-twitter.com.
+```
+
 ## Domain Block Lists
 
 The default set of blocked domains are retrieved from the source lists in [sources.json](sources/statics/sources.json).
