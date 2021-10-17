@@ -150,7 +150,7 @@ job "donutdns" {
     network {
       mode = "bridge"
       port "dns" {
-        static       = 5533
+        static       = 53
         to           = 5301
         host_network = "public"
       }
