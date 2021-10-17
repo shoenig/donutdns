@@ -13,3 +13,9 @@ echo "building image for $TAG"
 
 docker build --no-cache -t shoenig/donutdns:${TAG} .
 docker push shoenig/donutdns:${TAG}
+
+echo "build and publish complete"
+echo "container is shoenig/donutdns:${TAG}"
+echo ""
+echo "-> remember to update tags in README.md and on Docker Hub"
+
