@@ -14,8 +14,8 @@ import (
 // will have 0.0.0.0:53 redirected to this agent, which in turn needs to bootstrap
 // itself with the origin sources before it can serve requests.
 //
-// It should be possible to eliminate this chicken-egg problem using the healthcheck
-// plugin or something similar, where we just return fallthrough the donutdns plugin
+// It might be possible to eliminate this chicken-egg problem using the healthcheck
+// plugin or something similar, where we just fallthrough past the donutdns plugin
 // until it's actually ready. A project for a rainy day.
 //
 // Totally ripped from https://koraygocmen.medium.com/custom-dns-resolver-for-the-default-http-client-in-go-a1420db38a5d

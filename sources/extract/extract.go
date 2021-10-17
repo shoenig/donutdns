@@ -16,6 +16,7 @@ const (
 	Generic = `(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]`
 )
 
+// An Extractor reads content from an io.Reader and extracts domains into a Set.
 type Extractor interface {
 	Extract(io.Reader) (*set.Set, error)
 }
@@ -24,6 +25,7 @@ type extractor struct {
 	re *regexp.Regexp
 }
 
+// New creates a new Extractor, using regular expression re to match domains.
 func New(re string) Extractor {
 	return &extractor{
 		re: regexp.MustCompile(re),
@@ -35,9 +37,8 @@ func (e *extractor) Extract(r io.Reader) (*set.Set, error) {
 	s := set.New()
 	for scanner.Scan() {
 		line := scanner.Text()
-		if domain := e.parse(line); domain != "" {
-			s.Add(domain)
-		}
+		domain := e.parse(line)
+		s.Add(domain)
 	}
 	if err := scanner.Err(); err != nil {
 		return nil, err

@@ -9,6 +9,7 @@ import (
 	"github.com/coredns/coredns/plugin/pkg/log"
 	"gophers.dev/cmds/donutdns/sources"
 	"gophers.dev/cmds/donutdns/sources/extract"
+	"gophers.dev/cmds/donutdns/sources/fetch"
 	"gophers.dev/cmds/donutdns/sources/set"
 	"gophers.dev/pkgs/ignore"
 )
@@ -63,8 +64,8 @@ func setup(c *caddy.Controller) error {
 		}
 	}
 
-	plog.Infof("domains allowed: %d", dd.allow.Len())
-	plog.Infof("domains blocked: %d", dd.block.Len())
+	plog.Infof("domains on custom allow-list: %d", dd.allow.Len())
+	plog.Infof("domains on custom block-list: %d", dd.block.Len())
 
 	// Add the Plugin to CoreDNS, so Servers can use it in their plugin chain.
 	dnsserver.GetConfig(c).AddPlugin(func(next plugin.Handler) plugin.Handler {
@@ -77,8 +78,8 @@ func setup(c *caddy.Controller) error {
 }
 
 func defaults(set *set.Set) {
-	getter := sources.NewGetter(plog)
-	s, err := getter.Get(sources.Defaults())
+	downloader := fetch.NewDownloader(plog)
+	s, err := downloader.Download(sources.Defaults())
 	if err != nil {
 		panic(err)
 	}

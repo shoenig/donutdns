@@ -18,6 +18,9 @@ func Test_Add(t *testing.T) {
 
 	s.Add("foo")
 	require.Equal(t, 2, s.Len())
+
+	s.Add("")
+	require.Equal(t, 2, s.Len())
 }
 
 func Test_Union(t *testing.T) {

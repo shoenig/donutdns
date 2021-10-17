@@ -13,11 +13,14 @@ import (
 //go:embed config.tmpl
 var tmpl embed.FS
 
+// Forward contains DNS recursion configuration.
 type Forward struct {
 	Addresses  []string
 	ServerName string
 }
 
+// CoreConfig contains donutdns configuration.
+// It is used to generate CoreDNS (Caddy) style configuration blocks.
 type CoreConfig struct {
 	Port       int
 	NoDebug    bool
@@ -29,6 +32,7 @@ type CoreConfig struct {
 	Forward    Forward
 }
 
+// Generate a CoreDNS (Caddy) style configuration block as a string.
 func (cc *CoreConfig) Generate() string {
 	t, pErr := template.ParseFS(tmpl, "*.tmpl")
 	if pErr != nil {
@@ -42,6 +46,7 @@ func (cc *CoreConfig) Generate() string {
 	return b.String()
 }
 
+// ConfigFromEnv parses environment variables from e and creates a CoreConfig.
 func ConfigFromEnv(e env.Environment) *CoreConfig {
 	var (
 		allow     string
@@ -81,6 +86,7 @@ func ConfigFromEnv(e env.Environment) *CoreConfig {
 	return &cc
 }
 
+// Log cc to plog.
 func (cc *CoreConfig) Log(plog log.P) {
 	log.Infof("DONUT_DNS_PORT: %d", cc.Port)
 	log.Infof("DONUT_DNS_NO_DEBUG: %t", cc.NoDebug)
@@ -96,6 +102,11 @@ func (cc *CoreConfig) Log(plog log.P) {
 	log.Infof("DONUT_DNS_UPSTREAM_NAME: %s", cc.Forward.ServerName)
 }
 
+// ApplyDefaults sets reasonable default config values on a CoreConfig if no value is set.
+//
+// Port defaults to 5301.
+// Forward.Addresses defaults to [1.1.1.1, 1.0.0.1] (cloudflare dns servers)
+// Forward.ServerName defaults to cloudflare-dns.com (cloudflare dns servers)
 func ApplyDefaults(cc *CoreConfig) {
 	if cc.Port == 0 {
 		cc.Port = 5301

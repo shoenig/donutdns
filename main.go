@@ -1,7 +1,7 @@
+// Command donutdns implements a network level ad-blocking DNS server.
 package main
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/coredns/caddy"
@@ -16,6 +16,7 @@ import (
 	"gophers.dev/pkgs/extractors/env"
 )
 
+// directives contains the ordered set of plugins to enable in CoreDNS.
 var directives = []string{
 	"startup",
 	"debug",
@@ -25,31 +26,35 @@ var directives = []string{
 	"shutdown",
 }
 
-var plog = log.NewWithPlugin("donutdns")
+// pLog is the plugin logger associated with donutdns.
+var pLog = log.NewWithPlugin(donutdns.PluginName)
 
+// getCC generates a CoreDNS CoreConfig file using environment variables associated with
+// donutdns configuration.
 func getCC() *agent.CoreConfig {
 	cc := agent.ConfigFromEnv(env.OS)
 	agent.ApplyDefaults(cc)
-	cc.Log(plog)
+	cc.Log(pLog)
 	return cc
 }
 
 func init() {
+	// get core config from environment
 	cc := getCC()
 
-	fmt.Println(cc.Generate())
-
+	// set plugin core config
 	dnsserver.Port = strconv.Itoa(cc.Port)
 	dnsserver.Directives = directives
 	caddy.SetDefaultCaddyfileLoader(donutdns.PluginName, caddy.LoaderFunc(func(serverType string) (caddy.Input, error) {
 		return caddy.CaddyfileInput{
 			Filepath:       donutdns.PluginName,
 			Contents:       []byte(cc.Generate()),
-			ServerTypeName: "dns",
+			ServerTypeName: donutdns.ServerType,
 		}, nil
 	}))
 }
 
 func main() {
+	// launch CoreDNS; plugin configuration must be in init blocks
 	coremain.Run()
 }

@@ -19,8 +19,12 @@ type Set struct {
 }
 
 // Add item to the Set.
+//
+// Ignore item if it is empty.
 func (s *Set) Add(item string) {
-	s.items[item] = null
+	if item != "" {
+		s.items[item] = null
+	}
 }
 
 // Len returns the number of items in the Set.

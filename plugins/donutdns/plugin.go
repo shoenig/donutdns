@@ -12,6 +12,7 @@ import (
 
 const (
 	PluginName = "donutdns"
+	ServerType = "dns"
 )
 
 type DonutDNS struct {

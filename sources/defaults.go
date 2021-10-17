@@ -3,17 +3,12 @@ package sources
 import (
 	_ "embed"
 	"encoding/json"
-	"fmt"
-
-	"github.com/coredns/coredns/plugin/pkg/log"
-	"gophers.dev/cmds/donutdns/sources/extract"
-	"gophers.dev/cmds/donutdns/sources/fetch"
-	"gophers.dev/cmds/donutdns/sources/set"
 )
 
 //go:embed statics/sources.json
 var sources []byte
 
+// Lists represents the embedded JSON file containing default source lists.
 type Lists struct {
 	Suspicious  []string `json:"suspicious"`
 	Advertising []string `json:"advertising"`
@@ -22,17 +17,12 @@ type Lists struct {
 	Miners      []string `json:"miners"`
 }
 
-func (d *Lists) String() string {
-	return fmt.Sprintf(
-		"<%d %d %d %d %d>",
-		len(d.Suspicious), len(d.Advertising), len(d.Tracking), len(d.Malicious), len(d.Miners),
-	)
-}
-
+// Len returns the combined number of default source lists.
 func (d *Lists) Len() int {
 	return len(d.Suspicious) + len(d.Advertising) + len(d.Tracking) + len(d.Malicious) + len(d.Miners)
 }
 
+// All returns a combined list of all default source lists.
 func (d *Lists) All() []string {
 	all := make([]string, 0, d.Len())
 	all = append(all, d.Suspicious...)
@@ -43,38 +33,14 @@ func (d *Lists) All() []string {
 	return all
 }
 
+// Defaults returns the default set of source lists.
+//
+// The default set of source lists are embedded as statics/sources.json which
+// we then simply unmarshal at runtime.
 func Defaults() *Lists {
 	defaults := new(Lists)
 	if err := json.Unmarshal(sources, defaults); err != nil {
 		panic(err) // defaults are embedded
 	}
 	return defaults
-}
-
-type Getter interface {
-	Get(*Lists) (*set.Set, error)
-}
-
-type getter struct {
-	plog log.P
-}
-
-func NewGetter(plog log.P) Getter {
-	return &getter{
-		plog: plog,
-	}
-}
-
-func (g *getter) Get(lists *Lists) (*set.Set, error) {
-	f := fetch.New(g.plog, extract.New(extract.Generic))
-	combo := set.New()
-	for _, source := range lists.All() {
-		single, err := f.Fetch(source)
-		if err != nil {
-			g.plog.Errorf("failed to fetch source %q, skip: %s", source, err)
-			continue
-		}
-		combo.Union(single)
-	}
-	return combo, nil
 }
