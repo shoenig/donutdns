@@ -41,6 +41,10 @@ The blocking of the default set of domains can be disabled by setting `DONUT_DNS
 Additional domains can be blocked by `donutdns` by setting the `DONUT_DNS_BLOCK` and/or
 `DONUT_DNS_BLOCK_FILE` environment variables.
 
+Likewise, domains can be explicitly allowed by setting the `DONUT_DNS_ALLOW` and/or
+`DONUT_DNS_ALLOW_FILE` environment variables. The allow lists take precedense over
+the block lists.
+
 (!) Currently `donutdns` does not support wildcard subdomain blocking. Each subdomain
 to be blocked will also need to be added. (e.g. `example.com` and `www.example.com`)
 
@@ -58,6 +62,7 @@ The `donutdns` executable uses environment variables for configuration.
 | `DONUT_DNS_NO_DEBUG` | Disable CoreDNS debug logging (default unset) |
 | `DONUT_DNS_NO_LOG` | Disable CoreDNS logging (default unset) |
 | `DONUT_DNS_ALLOW` | Comma separated list of domains to NOT block (default unset) |
+| `DONUT_DNS_ALLOW_FILE` | File with list of domains to NOT block (default unset) |
 | `DONUT_DNS_BLOCK` | Comma separated list of domains to block (default unset) |
 | `DONUT_DNS_BLOCK_FILE` | File with list of domains to block (default unset) |
 | `DONUT_DNS_NO_DEFAULTS` | Disable blocking of default domain block lists (default unset) |
