@@ -26,6 +26,7 @@ type CoreConfig struct {
 	NoDebug    bool
 	NoLog      bool
 	Allows     []string
+	AllowFile  string
 	Blocks     []string
 	BlockFile  string
 	NoDefaults bool
@@ -61,6 +62,7 @@ func ConfigFromEnv(e env.Environment) *CoreConfig {
 		"DONUT_DNS_NO_DEBUG":      env.Bool(&cc.NoDebug, false),
 		"DONUT_DNS_NO_LOG":        env.Bool(&cc.NoLog, false),
 		"DONUT_DNS_ALLOW":         env.String(&allow, false),
+		"DONUT_DNS_ALLOW_FILE":    env.String(&cc.AllowFile, false),
 		"DONUT_DNS_BLOCK":         env.String(&block, false),
 		"DONUT_DNS_BLOCK_FILE":    env.String(&cc.BlockFile, false),
 		"DONUT_DNS_NO_DEFAULTS":   env.Bool(&cc.NoDefaults, false),
@@ -92,6 +94,7 @@ func (cc *CoreConfig) Log(plog log.P) {
 	log.Infof("DONUT_DNS_NO_DEBUG: %t", cc.NoDebug)
 	log.Infof("DONUT_DNS_NO_LOG: %t", cc.NoLog)
 	log.Infof("DONUT_DNS_ALLOW: %v", cc.Allows)
+	log.Infof("DONUT_DNS_ALLOW_FILE: %s", cc.AllowFile)
 	log.Infof("DONUT_DNS_BLOCK: %v", cc.Blocks)
 	log.Infof("DONUT_DNS_BLOCK_FILE: %s", cc.BlockFile)
 	log.Infof("DONUT_DNS_NO_DEFAULTS: %t", cc.NoDefaults)

@@ -14,6 +14,7 @@ func TestCoreConfig_Generate(t *testing.T) {
 		NoDebug:   true,
 		NoLog:     true,
 		Allows:    []string{"example.com", "pets.com"},
+		AllowFile: "/etc/allow.list",
 		Blocks:    []string{"facebook.com", "instagram.com"},
 		BlockFile: "/etc/block.list",
 		Forward: Forward{
@@ -27,6 +28,7 @@ func TestCoreConfig_Generate(t *testing.T) {
 .:1053 {
   donutdns {
     defaults true
+    allow_file /etc/allow.list
     block_file /etc/block.list
 
     allow example.com
@@ -86,6 +88,7 @@ func TestConfigFromEnv(t *testing.T) {
 	mEnv.GetenvMock.When("DONUT_DNS_NO_DEBUG").Then("1")
 	mEnv.GetenvMock.When("DONUT_DNS_NO_LOG").Then("1")
 	mEnv.GetenvMock.When("DONUT_DNS_ALLOW").Then("example.com,pets.com")
+	mEnv.GetenvMock.When("DONUT_DNS_ALLOW_FILE").Then("/etc/allow.list")
 	mEnv.GetenvMock.When("DONUT_DNS_BLOCK").Then("facebook.com,reddit.com")
 	mEnv.GetenvMock.When("DONUT_DNS_BLOCK_FILE").Then("/etc/block.list")
 	mEnv.GetenvMock.When("DONUT_DNS_NO_DEFAULTS").Then("")
@@ -99,6 +102,7 @@ func TestConfigFromEnv(t *testing.T) {
 		NoDebug:    true,
 		NoLog:      true,
 		Allows:     []string{"example.com", "pets.com"},
+		AllowFile:  "/etc/allow.list",
 		Blocks:     []string{"facebook.com", "reddit.com"},
 		BlockFile:  "/etc/block.list",
 		NoDefaults: false,
@@ -117,6 +121,7 @@ func TestConfigFromEnv_2(t *testing.T) {
 	mEnv.GetenvMock.When("DONUT_DNS_NO_DEBUG").Then("0")
 	mEnv.GetenvMock.When("DONUT_DNS_NO_LOG").Then("true")
 	mEnv.GetenvMock.When("DONUT_DNS_ALLOW").Then("")
+	mEnv.GetenvMock.When("DONUT_DNS_ALLOW_FILE").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_BLOCK").Then("facebook.com")
 	mEnv.GetenvMock.When("DONUT_DNS_BLOCK_FILE").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_NO_DEFAULTS").Then("true")

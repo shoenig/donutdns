@@ -3,6 +3,7 @@
   {{if not .NoLog}}log{{end}}
   donutdns {
     defaults {{not .NoDefaults}}
+    {{if .AllowFile}}allow_file {{.AllowFile}}{{end}}
     {{if .BlockFile}}block_file {{.BlockFile}}{{end}}
     {{range .Allows}}allow {{.}}
     {{end}}

@@ -20,6 +20,7 @@ func init() {
 	plugin.Register(PluginName, setup)
 }
 
+// todo: test with TestController
 func setup(c *caddy.Controller) error {
 
 	dd := DonutDNS{
@@ -39,6 +40,14 @@ func setup(c *caddy.Controller) error {
 				dd.defaultLists = c.Val() == "true"
 				if dd.defaultLists {
 					defaults(dd.block)
+				}
+
+			case "allow_file":
+				if !c.NextArg() {
+					return c.ArgErr()
+				}
+				if filename := c.Val(); filename != "" {
+					custom(c.Val(), dd.allow)
 				}
 
 			case "block_file":
