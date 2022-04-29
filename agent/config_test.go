@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/shoenig/test/must"
 	"gophers.dev/pkgs/extractors/env"
 )
 
@@ -24,7 +24,7 @@ func TestCoreConfig_Generate(t *testing.T) {
 	}
 
 	result := cc.Generate()
-	require.Equal(t, noWhitespace(`
+	must.EqOp(t, noWhitespace(`
 .:1053 {
   donutdns {
     defaults true
@@ -60,7 +60,7 @@ func TestCoreConfig_Generate_less(t *testing.T) {
 	}
 
 	result := cc.Generate()
-	require.Equal(t, noWhitespace(`
+	must.EqOp(t, noWhitespace(`
 .:1054 {
   debug
   log
@@ -97,7 +97,7 @@ func TestConfigFromEnv(t *testing.T) {
 	mEnv.GetenvMock.When("DONUT_DNS_UPSTREAM_NAME").Then("dns.google")
 
 	cc := ConfigFromEnv(mEnv)
-	require.Equal(t, &CoreConfig{
+	must.Eq(t, &CoreConfig{
 		Port:       1234,
 		NoDebug:    true,
 		NoLog:      true,
@@ -130,7 +130,7 @@ func TestConfigFromEnv_2(t *testing.T) {
 	mEnv.GetenvMock.When("DONUT_DNS_UPSTREAM_NAME").Then("dns.google")
 
 	cc := ConfigFromEnv(mEnv)
-	require.Equal(t, &CoreConfig{
+	must.Eq(t, &CoreConfig{
 		Port:       1234,
 		NoDebug:    false,
 		NoLog:      true,
