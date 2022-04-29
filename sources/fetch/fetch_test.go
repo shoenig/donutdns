@@ -6,10 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"gophers.dev/cmds/donutdns/sources"
-
 	"github.com/coredns/coredns/plugin/pkg/log"
-	"github.com/stretchr/testify/require"
+	"github.com/shoenig/test/must"
+	"gophers.dev/cmds/donutdns/sources"
 	"gophers.dev/cmds/donutdns/sources/extract"
 )
 
@@ -30,8 +29,8 @@ func Test_Get(t *testing.T) {
 	ex := extract.New(extract.Generic)
 	g := NewGetter(pLog, ex)
 	s, err := g.Get(ts.URL)
-	require.NoError(t, err)
-	require.Equal(t, 3, s.Len())
+	must.NoError(t, err)
+	must.EqOp(t, 3, s.Len())
 }
 
 func Test_Download(t *testing.T) {
@@ -52,7 +51,7 @@ func Test_Download(t *testing.T) {
 
 	d := NewDownloader(pLog)
 	s, err := d.Download(lists)
-	require.NoError(t, err)
-	require.Equal(t, 3, s.Len())
-	require.Equal(t, 5, hit)
+	must.NoError(t, err)
+	must.EqOp(t, 3, s.Len())
+	must.EqOp(t, 5, hit)
 }

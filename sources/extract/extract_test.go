@@ -7,12 +7,12 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/shoenig/test/must"
 )
 
 func openSample(t *testing.T, filename string) io.Reader {
 	b, err := ioutil.ReadFile(fmt.Sprintf("samples/%s", filename))
-	require.NoError(t, err)
+	must.NoError(t, err)
 	return bytes.NewBuffer(b)
 }
 
@@ -21,9 +21,8 @@ func TestExtractor_Extract(t *testing.T) {
 	try := func(filename, re string, exp int) {
 		ex := New(Generic)
 		result, err := ex.Extract(openSample(t, filename))
-		require.NoError(t, err)
-		fmt.Println("n:", result.Len())
-		require.Equal(t, exp, result.Len())
+		must.NoError(t, err)
+		must.EqOp(t, exp, result.Len())
 	}
 
 	try("KADhosts.txt", Generic, 6)
