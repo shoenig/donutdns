@@ -13,6 +13,8 @@ type Config struct {
 	CacheDir      string
 	CacheLifetime time.Duration
 	Version       string
+	Allow         string
+	Block         string
 }
 
 var conf = Config{
@@ -43,6 +45,8 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&conf.CacheDir, "cache", "", "cache directory (default is $HOME/.donut)")
+	rootCmd.PersistentFlags().StringVar(&conf.CacheDir, "cache", "", "cache directory (default is $HOME/.donutcache)")
 	rootCmd.PersistentFlags().StringVar(&conf.SourcesFile, "sources", "", "json sources file (default is built-in defaults)")
+	rootCmd.PersistentFlags().StringVar(&conf.Block, "block", "", "file with list of hostnames to block")
+	rootCmd.PersistentFlags().StringVar(&conf.Allow, "allow", "", "file with list of hostnames to allow")
 }

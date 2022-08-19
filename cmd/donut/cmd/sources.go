@@ -4,11 +4,27 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"github.com/spf13/cobra"
 	"os"
 )
 
 //go:embed sources.json
 var defaults []byte
+
+var defaultsCmd = &cobra.Command{
+	Use:   "defaults",
+	Short: "print the embedded list of sources",
+	RunE:  defaultsCommand,
+}
+
+func init() {
+	rootCmd.AddCommand(defaultsCmd)
+}
+
+func defaultsCommand(*cobra.Command, []string) error {
+	_, err := os.Stdout.Write(defaults)
+	return err
+}
 
 func sources() (map[string][]string, error) {
 	if len(conf.Sources) != 0 {

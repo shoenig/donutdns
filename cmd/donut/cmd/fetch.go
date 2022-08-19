@@ -36,22 +36,21 @@ func filenamesFromUrls(sources map[string][]string) map[string]string {
 			matches := urlRe.FindStringSubmatch(url)
 			if matches == nil {
 				_, fname = path.Split(url)
-				continue
-			}
-			hostname := matches[1]
-			parts := strings.Split(matches[2], "/")
-			switch hostname {
-			case "raw.githubusercontent.com", "bitbucket.org", "s3.amazonaws.com":
-				hostname = parts[0]
-				parts = parts[1:]
-			default:
-			}
-			if len(parts) > 0 {
-				fname = hostname + "-" + parts[0]
 			} else {
-				fname = hostname
+				hostname := matches[1]
+				parts := strings.Split(matches[2], "/")
+				switch hostname {
+				case "raw.githubusercontent.com", "bitbucket.org", "s3.amazonaws.com":
+					hostname = parts[0]
+					parts = parts[1:]
+				default:
+				}
+				if len(parts) > 0 {
+					fname = hostname + "-" + parts[len(parts)-1]
+				} else {
+					fname = hostname
+				}
 			}
-
 			if fname == "" {
 				fname = "list"
 			}
@@ -68,6 +67,7 @@ func filenamesFromUrls(sources map[string][]string) map[string]string {
 					i++
 				}
 			}
+			seen[fname] = struct{}{}
 			ret[url] = cat + "-" + fname
 		}
 	}
@@ -75,7 +75,7 @@ func filenamesFromUrls(sources map[string][]string) map[string]string {
 }
 
 func fetchCommand(*cobra.Command, []string) error {
-	_, err := fetchSources(true, true)
+	_, err := fetchLists(true, true)
 	return err
 }
 
@@ -100,7 +100,7 @@ func cacheDir() (string, error) {
 	return cd, nil
 }
 
-func fetchSources(force, verbose bool) (map[string][]byte, error) {
+func fetchLists(force, verbose bool) (map[string][]byte, error) {
 	sourceList, err := sources()
 	if err != nil {
 		return nil, err
@@ -115,7 +115,7 @@ func fetchSources(force, verbose bool) (map[string][]byte, error) {
 		filename := filepath.Join(cache, file)
 		if !force {
 			fi, err := os.Stat(filename)
-			if err == nil && fi.ModTime().Add(conf.CacheLifetime).Before(time.Now()) {
+			if err == nil && fi.ModTime().Add(conf.CacheLifetime).After(time.Now()) {
 				cachedContent, err := os.ReadFile(filename)
 				if err == nil {
 					content[url] = cachedContent
