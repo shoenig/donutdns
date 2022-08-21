@@ -168,7 +168,11 @@ WantedBy=multi-user.target
 Typically this file would be created at `/etc/systemd/system/donutdns.service`.
 
 Register the new unit with `sudo systemctl daemon-reload`
+
+Enable the service with `sudo systemctl enable donutdns.service`
+
 Start the sevice with `sudo systemctl start donutdns`
+
 Check the service with `sudo systemctl status donutdns`
 
 #### as a docker container
