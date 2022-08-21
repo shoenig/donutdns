@@ -238,6 +238,13 @@ EOH
   
 </details>
 
+## Troubleshooting
+
+Certain systems (looking at you RHEL/CentOS) make running a useable DNS server particularly
+difficult. On my homelab CentOS 9 system I had to disable ipv6 at the kernel level, disable
+SELinux, and disable firewalld. You may need to do something similar (ideally updating rules
+rather than disabling things) on your system.
+
 ## Build
 
 The `donutdns` standalone DNS Server is written in Go. It can be compiled and
