@@ -146,6 +146,31 @@ Use the environment variables described above to configure things.
 $ DONUT_DNS_PORT=5533 DONUT_DNS_NO_DEBUG=1 donutdns
 ```
 
+#### as a systemd unit
+
+The [donutdns.service](donutdns.service) file provides an example Systemd Service Unit file for running
+donutdns via systemd.
+
+```
+# A minimal unit file, see donutdns.service for more.
+
+[Unit]
+Description=Block ads, trackers, and malicioius sites using DonutDNS.
+
+[Service]
+ExecStart=/opt/bin/donutdns
+Environment=DONUT_DNS_PORT=53
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Typically this file would be created at `/etc/systemd/system/donutdns.service`.
+
+Register the new unit with `sudo systemctl daemon-reload`
+Start the sevice with `sudo systemctl start donutdns`
+Check the service with `sudo systemctl status donutdns`
+
 #### as a docker container
 
 `donutdns` is available from [Docker Hub](https://hub.docker.com/repository/docker/shoenig/donutdns/general)

@@ -1,0 +1,34 @@
+# This is an example systemd service file for running donutdns.
+#
+# It assumes the donutdns executable exists at /opt/bin/donutdns
+#
+# To use this service file:
+#   - Copy to /etc/systemd/system/donutdns.service
+#   - Run sudo systemctl daemon-reload
+#   - sudo systemctl start donutdns
+#
+# Check the status of the donutdns systemd service with
+#   - systemctl status donutdns
+#
+# If you have large block-lists you may need to tweak MemoryMax.
+# If donutdns is being used at scale you may want to set CPUWeight
+# to something higher than 100 (the default for systemd services).
+#
+# Environment variables can be configured as normal for systemd units.
+
+[Unit]
+Description=Block ads, trackers, and malicioius sites using DonutDNS.
+
+[Service]
+Type=simple
+ExecStart=/opt/bin/donutdns
+
+MemoryMax=42M
+CPUWeight=90
+
+Environment=DONUT_DNS_PORT=53
+Environment=DONUT_DNS_ALLOW=
+Environment=DONUT_DNS_BLOCK=
+
+[Install]
+WantedBy=multi-user.target
