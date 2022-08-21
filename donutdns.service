@@ -4,8 +4,9 @@
 #
 # To use this service file:
 #   - Copy to /etc/systemd/system/donutdns.service
-#   - Run sudo systemctl daemon-reload
-#   - sudo systemctl start donutdns
+#   - Run: sudo systemctl daemon-reload
+#   - Run: sudo systemctl enable donutdns.service
+#   - Run: systemctl start donutdns
 #
 # Check the status of the donutdns systemd service with
 #   - systemctl status donutdns
