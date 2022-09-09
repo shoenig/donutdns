@@ -1,5 +1,6 @@
 # Binaries for programs and plugins
 donutdns
+cmd/donut/donut
 *.exe
 *.exe~
 *.dll
