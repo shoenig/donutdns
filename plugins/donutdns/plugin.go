@@ -3,11 +3,12 @@ package donutdns
 import (
 	"context"
 	"net"
+	"strings"
 
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/request"
+	"github.com/hashicorp/go-set"
 	"github.com/miekg/dns"
-	"github.com/shoenig/donutdns/sources/set"
 )
 
 const (
@@ -19,20 +20,20 @@ type DonutDNS struct {
 	Next plugin.Handler
 
 	defaultLists bool
-	block        *set.Set
-	allow        *set.Set
+	block        *set.Set[string]
+	allow        *set.Set[string]
 }
 
 func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	state := request.Request{W: w, Req: r}
-	query := state.Name()
+	query := strings.TrimSuffix(state.Name(), ".")
 
-	if dd.allow.Has(query) {
+	if dd.allow.Contains(query) {
 		pLog.Infof("query for %s is explicitly allowed", query)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
-	if !dd.block.Has(query) {
+	if !dd.block.Contains(query) {
 		pLog.Debugf("query for %s is implicitly allowed", query)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}

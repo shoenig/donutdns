@@ -5,16 +5,16 @@ import (
 	"net/http"
 
 	"github.com/coredns/coredns/plugin/pkg/log"
+	"github.com/hashicorp/go-set"
 	"github.com/shoenig/donutdns/sources"
 	"github.com/shoenig/donutdns/sources/extract"
-	"github.com/shoenig/donutdns/sources/set"
 	"github.com/shoenig/ignore"
 )
 
 // A Downloader is used to download a set of source lists.
 type Downloader interface {
 	// Download all sources in Lists.
-	Download(*sources.Lists) (*set.Set, error)
+	Download(*sources.Lists) (*set.Set[string], error)
 }
 
 type downloader struct {
@@ -28,16 +28,16 @@ func NewDownloader(pLog log.P) Downloader {
 	}
 }
 
-func (d *downloader) Download(lists *sources.Lists) (*set.Set, error) {
+func (d *downloader) Download(lists *sources.Lists) (*set.Set[string], error) {
 	g := NewGetter(d.pLog, extract.New(extract.Generic))
-	combo := set.New()
+	combo := set.New[string](100)
 	for _, source := range lists.All() {
 		single, err := g.Get(source)
 		if err != nil {
 			d.pLog.Errorf("failed to fetch source %q, skip: %s", source, err)
 			continue
 		}
-		combo.Union(single)
+		combo.InsertSet(single)
 	}
 	return combo, nil
 }
@@ -45,7 +45,7 @@ func (d *downloader) Download(lists *sources.Lists) (*set.Set, error) {
 // A Getter is used to download a single source list.
 type Getter interface {
 	// Get source and extract its domains into a Set.
-	Get(source string) (*set.Set, error)
+	Get(source string) (*set.Set[string], error)
 }
 
 type getter struct {
@@ -66,7 +66,7 @@ func NewGetter(pLog log.P, ex extract.Extractor) Getter {
 	}
 }
 
-func (g *getter) Get(source string) (*set.Set, error) {
+func (g *getter) Get(source string) (*set.Set[string], error) {
 	request, err := http.NewRequest(http.MethodGet, source, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
@@ -88,7 +88,7 @@ func (g *getter) Get(source string) (*set.Set, error) {
 		return nil, fmt.Errorf("failed to extract sources: %w", err)
 	}
 
-	g.plog.Infof("got %d domains from %q", single.Len(), source)
+	g.plog.Infof("got %d domains from %q", single.Size(), source)
 
 	return single, nil
 }
