@@ -39,18 +39,20 @@ func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 	}
 
 	var answers []dns.RR
+	qType := dns.Type(state.QType()).String()
 
 	switch state.QType() {
 	case dns.TypeA:
 		answers = dd.a(query)
 	case dns.TypeAAAA:
 		answers = dd.aaaa(query)
+	case dns.TypeHTTPS:
+		answers = dd.https(query)
 	default:
-		pLog.Debugf("query: %s type: %d not an A or AAAA record, fallthrough", query, state.QType())
+		pLog.Debugf("query: %s type: %s not recognized, fallthrough", query, qType)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
-	qType := dns.Type(state.QType()).String()
 	pLog.Infof("BLOCK query (%s) for %s", qType, query)
 
 	m := new(dns.Msg)
@@ -103,4 +105,8 @@ func (dd DonutDNS) aaaa(zone string) []dns.RR {
 	}
 	r.AAAA = sinkAAAA
 	return []dns.RR{r}
+}
+
+func (dd DonutDNS) https(zone string) []dns.RR {
+	return dd.a(zone)
 }
