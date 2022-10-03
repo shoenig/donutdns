@@ -30,7 +30,7 @@ func Test_Get(t *testing.T) {
 	g := NewGetter(pLog, ex)
 	s, err := g.Get(ts.URL)
 	must.NoError(t, err)
-	must.EqOp(t, 3, s.Len())
+	must.EqOp(t, 3, s.Size())
 }
 
 func Test_Download(t *testing.T) {
@@ -52,6 +52,6 @@ func Test_Download(t *testing.T) {
 	d := NewDownloader(pLog)
 	s, err := d.Download(lists)
 	must.NoError(t, err)
-	must.EqOp(t, 3, s.Len())
+	must.EqOp(t, 3, s.Size())
 	must.EqOp(t, 5, hit)
 }

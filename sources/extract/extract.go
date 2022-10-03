@@ -5,7 +5,7 @@ import (
 	"io"
 	"regexp"
 
-	"github.com/shoenig/donutdns/sources/set"
+	"github.com/hashicorp/go-set"
 )
 
 const (
@@ -18,7 +18,7 @@ const (
 
 // An Extractor reads content from an io.Reader and extracts domains into a Set.
 type Extractor interface {
-	Extract(io.Reader) (*set.Set, error)
+	Extract(io.Reader) (*set.Set[string], error)
 }
 
 type extractor struct {
@@ -32,13 +32,11 @@ func New(re string) Extractor {
 	}
 }
 
-func (e *extractor) Extract(r io.Reader) (*set.Set, error) {
+func (e *extractor) Extract(r io.Reader) (*set.Set[string], error) {
 	scanner := bufio.NewScanner(r)
-	s := set.New()
+	s := set.New[string](100)
 	for scanner.Scan() {
-		line := scanner.Text()
-		domain := e.parse(line)
-		s.Add(domain)
+		e.insert(s, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
 		return nil, err
@@ -54,6 +52,12 @@ func (e *extractor) parse(line string) string {
 	case line[0] == '#':
 		return ""
 	}
-
 	return e.re.FindString(line)
+}
+
+func (e *extractor) insert(s *set.Set[string], line string) {
+	domain := e.parse(line)
+	if domain != "" {
+		s.Insert(domain)
+	}
 }

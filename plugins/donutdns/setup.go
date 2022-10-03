@@ -7,10 +7,10 @@ import (
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/plugin/pkg/log"
+	"github.com/hashicorp/go-set"
 	"github.com/shoenig/donutdns/sources"
 	"github.com/shoenig/donutdns/sources/extract"
 	"github.com/shoenig/donutdns/sources/fetch"
-	"github.com/shoenig/donutdns/sources/set"
 	"github.com/shoenig/ignore"
 )
 
@@ -25,8 +25,8 @@ func setup(c *caddy.Controller) error {
 
 	dd := DonutDNS{
 		defaultLists: true,
-		block:        set.New(),
-		allow:        set.New(),
+		block:        set.New[string](100),
+		allow:        set.New[string](100),
 	}
 
 	for c.Next() {
@@ -62,19 +62,19 @@ func setup(c *caddy.Controller) error {
 				if !c.NextArg() {
 					return c.ArgErr()
 				}
-				dd.block.Add(c.Val())
+				dd.block.Insert(c.Val())
 
 			case "allow":
 				if !c.NextArg() {
 					return c.ArgErr()
 				}
-				dd.allow.Add(c.Val())
+				dd.allow.Insert(c.Val())
 			}
 		}
 	}
 
-	pLog.Infof("domains on custom allow-list: %d", dd.allow.Len())
-	pLog.Infof("domains on custom block-list: %d", dd.block.Len())
+	pLog.Infof("domains on custom allow-list: %d", dd.allow.Size())
+	pLog.Infof("domains on custom block-list: %d", dd.block.Size())
 
 	// Add the Plugin to CoreDNS, so Servers can use it in their plugin chain.
 	dnsserver.GetConfig(c).AddPlugin(func(next plugin.Handler) plugin.Handler {
@@ -86,16 +86,16 @@ func setup(c *caddy.Controller) error {
 	return nil
 }
 
-func defaults(set *set.Set) {
+func defaults(set *set.Set[string]) {
 	downloader := fetch.NewDownloader(pLog)
 	s, err := downloader.Download(sources.Defaults())
 	if err != nil {
 		panic(err)
 	}
-	set.Union(s)
+	set.InsertSet(s)
 }
 
-func custom(filename string, set *set.Set) {
+func custom(filename string, set *set.Set[string]) {
 	// for now, everything uses the generic domain extractor
 	ex := extract.New(extract.Generic)
 	f, err := os.Open(filename)
@@ -107,5 +107,5 @@ func custom(filename string, set *set.Set) {
 	if err != nil {
 		panic(err)
 	}
-	set.Union(s)
+	set.InsertSet(s)
 }
