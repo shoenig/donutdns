@@ -1,14 +1,13 @@
 name: Run CI Tests
 on: [push]
 env:
-  GOBIN: /opt/bin
-  GO_VERSION: 1.18.1
+  GO_VERSION: 1.18.6
 jobs:
   run-tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: magnetikonline/action-golang-cache@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
         with:
           go-version: ${{env.GO_VERSION}}
       - name: Run Go Vet
