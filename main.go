@@ -11,9 +11,9 @@ import (
 	_ "github.com/coredns/coredns/plugin/forward"
 	_ "github.com/coredns/coredns/plugin/log"
 	"github.com/coredns/coredns/plugin/pkg/log"
-	"gophers.dev/cmds/donutdns/agent"
-	"gophers.dev/cmds/donutdns/plugins/donutdns"
-	"gophers.dev/pkgs/extractors/env"
+	"github.com/shoenig/donutdns/agent"
+	"github.com/shoenig/donutdns/plugins/donutdns"
+	"github.com/shoenig/extractors/env"
 )
 
 // directives contains the ordered set of plugins to enable in CoreDNS.

@@ -7,9 +7,9 @@ import (
 	"testing"
 
 	"github.com/coredns/coredns/plugin/pkg/log"
+	"github.com/shoenig/donutdns/sources"
+	"github.com/shoenig/donutdns/sources/extract"
 	"github.com/shoenig/test/must"
-	"gophers.dev/cmds/donutdns/sources"
-	"gophers.dev/cmds/donutdns/sources/extract"
 )
 
 var pLog = log.NewWithPlugin("-test")

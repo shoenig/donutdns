@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/shoenig/extractors/env"
 	"github.com/shoenig/test/must"
-	"gophers.dev/pkgs/extractors/env"
 )
 
 func TestCoreConfig_Generate(t *testing.T) {
