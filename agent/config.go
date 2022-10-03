@@ -7,7 +7,7 @@ import (
 	"text/template"
 
 	"github.com/coredns/coredns/plugin/pkg/log"
-	"gophers.dev/pkgs/extractors/env"
+	"github.com/shoenig/extractors/env"
 )
 
 //go:embed config.tmpl

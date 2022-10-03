@@ -2,15 +2,11 @@
 
 Block online ads by intercepting DNS queries
 
-[![Go Report Card](https://goreportcard.com/badge/gophers.dev/cmds/donutdns)](https://goreportcard.com/report/gophers.dev/cmds/donutdns)
-[![Build Status](https://app.travis-ci.com/shoenig/donutdns.svg)](https://app.travis-ci.com/github/shoenig/donutdns)
-[![GoDoc](https://godoc.org/gophers.dev/cmds/donutdns?status.svg)](https://godoc.org/gophers.dev/cmds/donutdns)
-![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/shoenig/donutdns.svg)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 ## Project Overview
 
-The `gophers.dev/cmds/donutdns` module provides a [CoreDNS](https://coredns.io) plugin
+The `github.com/shoenig/donutdns` module provides a [CoreDNS](https://coredns.io) plugin
 as well as a standalone executable DNS server that can be used to block DNS queries to
 domains used by online advertisers, trackers, scammers, and crypto miners. The project
 is meant to be a simpler alternative to the venerable [Pi-Hole](https://pi-hole.net). In
@@ -251,14 +247,14 @@ The `donutdns` standalone DNS Server is written in Go. It can be compiled and
 installed using the normal Go toolchain in one step.
 
 ```
-go install gophers.dev/cmds/donutdns@latest
+go install github.com/shoenig/donutdns@latest
 ```
 
 ## Contributing
 
-The `gophers.dev/cmds/donutdns` module is always improving with new features
+The `github.com/shoenig/donutdns` module is always improving with new features
 and bug fixes. For contributing such bug fixes and new features please file an issue.
 
 ## License
 
-The `gophers.dev/cmds/donutdns` module is open source under the [BSD-3-Clause](LICENSE) license.
+The `github.com/shoenig/donutdns` module is open source under the [BSD-3-Clause](LICENSE) license.

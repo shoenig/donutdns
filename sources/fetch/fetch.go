@@ -5,10 +5,10 @@ import (
 	"net/http"
 
 	"github.com/coredns/coredns/plugin/pkg/log"
-	"gophers.dev/cmds/donutdns/sources"
-	"gophers.dev/cmds/donutdns/sources/extract"
-	"gophers.dev/cmds/donutdns/sources/set"
-	"gophers.dev/pkgs/ignore"
+	"github.com/shoenig/donutdns/sources"
+	"github.com/shoenig/donutdns/sources/extract"
+	"github.com/shoenig/donutdns/sources/set"
+	"github.com/shoenig/ignore"
 )
 
 // A Downloader is used to download a set of source lists.

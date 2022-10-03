@@ -7,11 +7,11 @@ import (
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/plugin/pkg/log"
-	"gophers.dev/cmds/donutdns/sources"
-	"gophers.dev/cmds/donutdns/sources/extract"
-	"gophers.dev/cmds/donutdns/sources/fetch"
-	"gophers.dev/cmds/donutdns/sources/set"
-	"gophers.dev/pkgs/ignore"
+	"github.com/shoenig/donutdns/sources"
+	"github.com/shoenig/donutdns/sources/extract"
+	"github.com/shoenig/donutdns/sources/fetch"
+	"github.com/shoenig/donutdns/sources/set"
+	"github.com/shoenig/ignore"
 )
 
 var pLog = log.NewWithPlugin(PluginName)

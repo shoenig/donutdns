@@ -6,7 +6,7 @@ RUN go version && \
     CGO_ENABLED=0 GOOS=linux go build
 
 FROM alpine:3
-MAINTAINER gophers.dev
+MAINTAINER sethops1.net
 
 WORKDIR /opt
 COPY --from=builder /build/donutdns /opt

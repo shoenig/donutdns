@@ -7,7 +7,7 @@ import (
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/request"
 	"github.com/miekg/dns"
-	"gophers.dev/cmds/donutdns/sources/set"
+	"github.com/shoenig/donutdns/sources/set"
 )
 
 const (

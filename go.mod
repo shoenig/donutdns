@@ -1,4 +1,4 @@
-module gophers.dev/cmds/donutdns
+module github.com/shoenig/donutdns
 
 go 1.18
 
@@ -7,9 +7,9 @@ require (
 	github.com/coredns/coredns v1.8.5
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/miekg/dns v1.1.43
-	github.com/shoenig/test v0.2.4
-	gophers.dev/pkgs/extractors v0.2.3
-	gophers.dev/pkgs/ignore v0.3.0
+	github.com/shoenig/extractors v0.3.0
+	github.com/shoenig/ignore v0.4.0
+	github.com/shoenig/test v0.4.0
 )
 
 require (
@@ -20,7 +20,7 @@ require (
 	github.com/dnstap/golang-dnstap v0.4.0 // indirect
 	github.com/farsightsec/golang-framestream v0.3.0 // indirect
 	github.com/flynn/go-shlex v0.0.0-20150515145356-3f9db97f8568 // indirect
-	github.com/gojuno/minimock/v3 v3.0.4 // indirect
+	github.com/gojuno/minimock/v3 v3.0.10 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645 // indirect

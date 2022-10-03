@@ -5,7 +5,7 @@ import (
 	"io"
 	"regexp"
 
-	"gophers.dev/cmds/donutdns/sources/set"
+	"github.com/shoenig/donutdns/sources/set"
 )
 
 const (
