@@ -180,13 +180,14 @@ WantedBy=multi-user.target
 
 Typically this file would be created at `/etc/systemd/system/donutdns.service`.
 
-Register the new unit with `sudo systemctl daemon-reload`
+Configure systemd to run the new service.
 
-Enable the service with `sudo systemctl enable donutdns.service`
-
-Start the sevice with `sudo systemctl start donutdns`
-
-Check the service with `sudo systemctl status donutdns`
+```shell
+sudo systemctl daemon-reload           # update systemd configurations
+sudo systemctl enable donutdns.service # enable donutdns service in systemd
+sudo systemctl start donutdns          # start donutdns service in systemd
+sudo systemctl status donutdns         # inspect status of donutdns service in systemd
+```
 
 #### as a docker container
 
@@ -194,7 +195,7 @@ Check the service with `sudo systemctl status donutdns`
 
 This will run the `donutdns` Docker container as the `nobody` user, mapping traffic from port 53. 
 ```
-docker run --rm -p 53:5301 -u nobody shoenig/donutdns:v0.1.2
+docker run --rm -p 53:5301 -u nobody shoenig/donutdns:v0.2.0
 ```
 
 #### as a Nomad job
