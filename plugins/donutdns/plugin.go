@@ -20,28 +20,41 @@ type DonutDNS struct {
 	Next plugin.Handler
 
 	defaultLists bool
+	suffix       *set.Set[string]
 	block        *set.Set[string]
 	allow        *set.Set[string]
 }
 
 func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	state := request.Request{W: w, Req: r}
-	query := strings.TrimSuffix(state.Name(), ".")
 
-	if dd.allow.Contains(query) {
-		pLog.Infof("query for %s is explicitly allowed", query)
+	origQuery := state.Name()
+	cleanQuery := strings.Trim(origQuery, ".")
+
+	if dd.allow.Contains(cleanQuery) {
+		pLog.Debugf("query for %s is explicitly allowed", cleanQuery)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
-	if !dd.block.Contains(query) {
-		pLog.Debugf("query for %s is implicitly allowed", query)
-		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
+	if dd.block.Contains(cleanQuery) {
+		pLog.Debugf("query for %s is blocked by match", cleanQuery)
+		return dd.null(state.QType(), origQuery, ctx, w, r)
 	}
 
+	if blockBySuffix(dd.suffix, cleanQuery) {
+		pLog.Debugf("query for %s is blocked by suffix", cleanQuery)
+		return dd.null(state.QType(), origQuery, ctx, w, r)
+	}
+
+	pLog.Debugf("query for %s is implicitly allowed", cleanQuery)
+	return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
+}
+
+func (dd DonutDNS) null(qType uint16, query string, ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	var answers []dns.RR
-	qType := dns.Type(state.QType()).String()
+	queryType := dns.Type(qType).String()
 
-	switch state.QType() {
+	switch qType {
 	case dns.TypeA:
 		answers = dd.a(query)
 	case dns.TypeAAAA:
@@ -49,11 +62,11 @@ func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 	case dns.TypeHTTPS:
 		answers = dd.https(query)
 	default:
-		pLog.Debugf("query: %s type: %s not recognized, fallthrough", query, qType)
+		pLog.Debugf("query: %s type: %s not recognized, fallthrough", query, queryType)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
-	pLog.Infof("BLOCK query (%s) for %s", qType, query)
+	pLog.Infof("BLOCK query (%s) for %s", queryType, query)
 
 	m := new(dns.Msg)
 	m.SetReply(r)

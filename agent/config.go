@@ -29,6 +29,8 @@ type CoreConfig struct {
 	AllowFile  string
 	Blocks     []string
 	BlockFile  string
+	Suffix     []string
+	SuffixFile string
 	NoDefaults bool
 	Forward    Forward
 }
@@ -52,6 +54,7 @@ func ConfigFromEnv(e env.Environment) *CoreConfig {
 	var (
 		allow     string
 		block     string
+		suffix    string
 		upstream1 string
 		upstream2 string
 	)
@@ -65,6 +68,8 @@ func ConfigFromEnv(e env.Environment) *CoreConfig {
 		"DONUT_DNS_ALLOW_FILE":    env.String(&cc.AllowFile, false),
 		"DONUT_DNS_BLOCK":         env.String(&block, false),
 		"DONUT_DNS_BLOCK_FILE":    env.String(&cc.BlockFile, false),
+		"DONUT_DNS_SUFFIX":        env.String(&suffix, false),
+		"DONUT_DNS_SUFFIX_FILE":   env.String(&cc.SuffixFile, false),
 		"DONUT_DNS_NO_DEFAULTS":   env.Bool(&cc.NoDefaults, false),
 		"DONUT_DNS_UPSTREAM_1":    env.String(&upstream1, false),
 		"DONUT_DNS_UPSTREAM_2":    env.String(&upstream2, false),
@@ -84,6 +89,7 @@ func ConfigFromEnv(e env.Environment) *CoreConfig {
 
 	cc.Allows = split(allow)
 	cc.Blocks = split(block)
+	cc.Suffix = split(suffix)
 
 	return &cc
 }
@@ -97,6 +103,8 @@ func (cc *CoreConfig) Log(plog log.P) {
 	log.Infof("DONUT_DNS_ALLOW_FILE: %s", cc.AllowFile)
 	log.Infof("DONUT_DNS_BLOCK: %v", cc.Blocks)
 	log.Infof("DONUT_DNS_BLOCK_FILE: %s", cc.BlockFile)
+	log.Infof("DONUT_DNS_SUFFIX: %v", cc.Suffix)
+	log.Infof("DONUT_DNS_SUFFIX_FILE: %s", cc.SuffixFile)
 	log.Infof("DONUT_DNS_NO_DEFAULTS: %t", cc.NoDefaults)
 	log.Infof("DONUT_DNS_UPSTREAM_1: %s", cc.Forward.Addresses[0])
 	if len(cc.Forward.Addresses) == 2 {
