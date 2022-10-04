@@ -49,6 +49,20 @@ any query matching the given suffix(es) will be blocked.
 
 `donutdns` can be used as a CoreDNS Plugin or standalone DNS Server.
 
+#### Install 
+
+The `donutdns` standalone DNS Server is written in Go.
+
+Pre-compiled binaries are available for download from the [Releases](https://github.com/shoenig/donutdns/releases) page.
+
+Docker images are available from [Docker Hub](https://hub.docker.com/r/shoenig/donutdns).
+
+With the Go toolchain, `donutdns` standalone can be compiled and installed in one step:
+
+```
+go install github.com/shoenig/donutdns@latest
+```
+
 #### DNS Server
 
 The `donutdns` executable uses environment variables for configuration.
@@ -243,15 +257,6 @@ Certain systems (looking at you RHEL/CentOS) make running a useable DNS server p
 difficult. On my homelab CentOS 9 system I had to disable ipv6 at the kernel level, disable
 SELinux, and disable firewalld. You may need to do something similar (ideally updating rules
 rather than disabling things) on your system.
-
-## Build
-
-The `donutdns` standalone DNS Server is written in Go. It can be compiled and
-installed using the normal Go toolchain in one step.
-
-```
-go install github.com/shoenig/donutdns@latest
-```
 
 ## Contributing
 
