@@ -18,11 +18,11 @@ with little to no configuration.
 ```
 [INFO] plugin/donutdns: BLOCK query (A) for www.google-analytics.com.
 [INFO] plugin/donutdns: BLOCK query (A) for www-google-analytics.l.google.com.
-[INFO] plugin/donutdns: BLOCK query (A) for stats.wp.com.
+[INFO] plugin/donutdns: BLOCK query (AAAA) for stats.wp.com.
 [INFO] plugin/donutdns: BLOCK query (A) for www.googletagservices.com.
 [INFO] plugin/donutdns: BLOCK query (A) for tpc.googlesyndication.com.
 [INFO] plugin/donutdns: BLOCK query (A) for c.amazon-adsystem.com.
-[INFO] plugin/donutdns: BLOCK query (A) for static.ads-twitter.com.
+[INFO] plugin/donutdns: BLOCK query (AAAA) for static.ads-twitter.com.
 ```
 
 ## Domain Block Lists
@@ -41,8 +41,9 @@ Likewise, domains can be explicitly allowed by setting the `DONUT_DNS_ALLOW` and
 `DONUT_DNS_ALLOW_FILE` environment variables. The allow lists take precedense over
 the block lists.
 
-(!) Currently `donutdns` does not support wildcard subdomain blocking. Each subdomain
-to be blocked will also need to be added. (e.g. `example.com` and `www.example.com`)
+For nasty companies like Facebook with dynamic subdomains, `donutdns` supports blocking
+domains by suffix matching. By setting `DONUT_DNS_SUFFIX` and/or `DONUT_DNS_SUFFIX_FILE`
+any query matching the given suffix(es) will be blocked.
 
 ## Getting Started
 
@@ -61,6 +62,8 @@ The `donutdns` executable uses environment variables for configuration.
 | `DONUT_DNS_ALLOW_FILE` | File with list of domains to NOT block (default unset) |
 | `DONUT_DNS_BLOCK` | Comma separated list of domains to block (default unset) |
 | `DONUT_DNS_BLOCK_FILE` | File with list of domains to block (default unset) |
+| `DONUT_DNS_SUFFIX` | Comma separated list of domains to block by suffix (default unset) |
+| `DONUT_DNS_SUFFIX_FILE` | File with list of domains to block by suffix (default unset) |
 | `DONUT_DNS_NO_DEFAULTS` | Disable blocking of default domain block lists (default unset) |
 | `DONUT_DNS_UPSTREAM_1` | Fallback DNS Server for non-blocked queries (default `1.1.1.1`) |
 | `DONUT_DNS_UPSTREAM_2` | Fallback DNS Server for non-blocked queries (default `1.0.0.1`) |
