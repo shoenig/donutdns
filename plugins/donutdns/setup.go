@@ -25,6 +25,7 @@ func setup(c *caddy.Controller) error {
 
 	dd := DonutDNS{
 		defaultLists: true,
+		suffix:       set.New[string](100),
 		block:        set.New[string](100),
 		allow:        set.New[string](100),
 	}
@@ -47,7 +48,7 @@ func setup(c *caddy.Controller) error {
 					return c.ArgErr()
 				}
 				if filename := c.Val(); filename != "" {
-					custom(c.Val(), dd.allow)
+					custom(filename, dd.allow)
 				}
 
 			case "block_file":
@@ -55,8 +56,22 @@ func setup(c *caddy.Controller) error {
 					return c.ArgErr()
 				}
 				if filename := c.Val(); filename != "" {
-					custom(c.Val(), dd.block)
+					custom(filename, dd.block)
 				}
+
+			case "suffix_file":
+				if !c.NextArg() {
+					return c.ArgErr()
+				}
+				if filename := c.Val(); filename != "" {
+					custom(filename, dd.suffix)
+				}
+
+			case "allow":
+				if !c.NextArg() {
+					return c.ArgErr()
+				}
+				dd.allow.Insert(c.Val())
 
 			case "block":
 				if !c.NextArg() {
@@ -64,17 +79,18 @@ func setup(c *caddy.Controller) error {
 				}
 				dd.block.Insert(c.Val())
 
-			case "allow":
+			case "suffix":
 				if !c.NextArg() {
 					return c.ArgErr()
 				}
-				dd.allow.Insert(c.Val())
+				dd.suffix.Insert(c.Val())
 			}
 		}
 	}
 
-	pLog.Infof("domains on custom allow-list: %d", dd.allow.Size())
-	pLog.Infof("domains on custom block-list: %d", dd.block.Size())
+	pLog.Infof("domains on explicit allow-list: %d", dd.allow.Size())
+	pLog.Infof("domains on explicit block-list: %d", dd.block.Size())
+	pLog.Infof("domains on suffixes block-list: %d", dd.suffix.Size())
 
 	// Add the Plugin to CoreDNS, so Servers can use it in their plugin chain.
 	dnsserver.GetConfig(c).AddPlugin(func(next plugin.Handler) plugin.Handler {

@@ -5,9 +5,12 @@
     defaults {{not .NoDefaults}}
     {{if .AllowFile}}allow_file {{.AllowFile}}{{end}}
     {{if .BlockFile}}block_file {{.BlockFile}}{{end}}
+    {{if .SuffixFile}}suffix_file {{.SuffixFile}}{{end}}
     {{range .Allows}}allow {{.}}
     {{end}}
     {{range .Blocks}}block {{.}}
+    {{end}}
+    {{range .Suffix}}suffix {{.}}
     {{end}}
   }
   forward . {{range .Forward.Addresses}}{{.}} {{end}}{
