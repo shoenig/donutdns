@@ -1,12 +1,11 @@
-package fetch
+package sources
 
 import (
 	"fmt"
 	"net/http"
 
-	"github.com/coredns/coredns/plugin/pkg/log"
 	"github.com/hashicorp/go-set"
-	"github.com/shoenig/donutdns/sources"
+	"github.com/shoenig/donutdns/output"
 	"github.com/shoenig/donutdns/sources/extract"
 	"github.com/shoenig/ignore"
 )
@@ -14,27 +13,27 @@ import (
 // A Downloader is used to download a set of source lists.
 type Downloader interface {
 	// Download all sources in Lists.
-	Download(*sources.Lists) (*set.Set[string], error)
+	Download(*Lists) (*set.Set[string], error)
 }
 
 type downloader struct {
-	pLog log.P
+	logger output.Logger
 }
 
 // NewDownloader creates a new Downloader for downloading source lists.
-func NewDownloader(pLog log.P) Downloader {
+func NewDownloader(logger output.Logger) Downloader {
 	return &downloader{
-		pLog: pLog,
+		logger: logger,
 	}
 }
 
-func (d *downloader) Download(lists *sources.Lists) (*set.Set[string], error) {
-	g := NewGetter(d.pLog, extract.New(extract.Generic))
+func (d *downloader) Download(lists *Lists) (*set.Set[string], error) {
+	g := NewGetter(d.logger, extract.New(extract.Generic))
 	combo := set.New[string](100)
 	for _, source := range lists.All() {
 		single, err := g.Get(source)
 		if err != nil {
-			d.pLog.Errorf("failed to fetch source %q, skip: %s", source, err)
+			d.logger.Errorf("failed to fetch source %q, skip: %s", source, err)
 			continue
 		}
 		combo.InsertSet(single)
@@ -51,18 +50,18 @@ type Getter interface {
 type getter struct {
 	client *http.Client
 	ex     extract.Extractor
-	plog   log.P
+	logger output.Logger
 }
 
 // NewGetter creates a new Getter, using Extractor ex to extract domains.
-func NewGetter(pLog log.P, ex extract.Extractor) Getter {
+func NewGetter(logger output.Logger, ex extract.Extractor) Getter {
 	return &getter{
 		client: client(
 		// todo: pass in one of the upstreams
 		//  currently hard-code cloudflare for bootstrapping the sources
 		),
-		ex:   ex,
-		plog: pLog,
+		ex:     ex,
+		logger: logger,
 	}
 }
 
@@ -88,7 +87,7 @@ func (g *getter) Get(source string) (*set.Set[string], error) {
 		return nil, fmt.Errorf("failed to extract sources: %w", err)
 	}
 
-	g.plog.Infof("got %d domains from %q", single.Size(), source)
+	g.logger.Infof("got %d domains from %q", single.Size(), source)
 
 	return single, nil
 }

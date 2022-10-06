@@ -1,34 +1,24 @@
 package donutdns
 
 import (
-	"os"
-
 	"github.com/coredns/caddy"
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/plugin/pkg/log"
-	"github.com/hashicorp/go-set"
+	"github.com/shoenig/donutdns/agent"
 	"github.com/shoenig/donutdns/sources"
-	"github.com/shoenig/donutdns/sources/extract"
-	"github.com/shoenig/donutdns/sources/fetch"
-	"github.com/shoenig/ignore"
 )
 
-var pLog = log.NewWithPlugin(PluginName)
+var pluginLogger = log.NewWithPlugin(PluginName)
 
-func init() {
-	plugin.Register(PluginName, setup)
-}
-
+// Setup will parse plugin config and register the donutdns plugin
+// with the CoreDNS core server.
+//
 // todo: test with TestController
-func setup(c *caddy.Controller) error {
+func Setup(c *caddy.Controller) error {
 
-	dd := DonutDNS{
-		defaultLists: true,
-		suffix:       set.New[string](100),
-		block:        set.New[string](100),
-		allow:        set.New[string](100),
-	}
+	// reconstruct the parts of CoreConfig for initializing the allow/block lists
+	cc := new(agent.CoreConfig)
 
 	for c.Next() {
 		_ = c.RemainingArgs()
@@ -38,61 +28,55 @@ func setup(c *caddy.Controller) error {
 				if !c.NextArg() {
 					return c.ArgErr()
 				}
-				dd.defaultLists = c.Val() == "true"
-				if dd.defaultLists {
-					defaults(dd.block)
-				}
+				cc.NoDefaults = c.Val() == "false"
 
 			case "allow_file":
 				if !c.NextArg() {
 					return c.ArgErr()
 				}
-				if filename := c.Val(); filename != "" {
-					custom(filename, dd.allow)
-				}
+				cc.AllowFile = c.Val()
 
 			case "block_file":
 				if !c.NextArg() {
 					return c.ArgErr()
 				}
-				if filename := c.Val(); filename != "" {
-					custom(filename, dd.block)
-				}
+				cc.BlockFile = c.Val()
 
 			case "suffix_file":
 				if !c.NextArg() {
 					return c.ArgErr()
 				}
-				if filename := c.Val(); filename != "" {
-					custom(filename, dd.suffix)
-				}
+				cc.SuffixFile = c.Val()
 
 			case "allow":
 				if !c.NextArg() {
 					return c.ArgErr()
 				}
-				dd.allow.Insert(c.Val())
+				cc.Allows = append(cc.Allows, c.Val())
 
 			case "block":
 				if !c.NextArg() {
 					return c.ArgErr()
 				}
-				dd.block.Insert(c.Val())
+				cc.Blocks = append(cc.Blocks, c.Val())
 
 			case "suffix":
 				if !c.NextArg() {
 					return c.ArgErr()
 				}
-				dd.suffix.Insert(c.Val())
+				cc.Suffix = append(cc.Suffix, c.Val())
 			}
 		}
 	}
 
-	pLog.Infof("domains on explicit allow-list: %d", dd.allow.Size())
-	pLog.Infof("domains on explicit block-list: %d", dd.block.Size())
-	pLog.Infof("domains on suffixes block-list: %d", dd.suffix.Size())
+	sets := sources.New(pluginLogger, cc)
+	allow, block, suffix := sets.Size()
+	pluginLogger.Infof("domains on explicit allow-list: %d", allow)
+	pluginLogger.Infof("domains on explicit block-list: %d", block)
+	pluginLogger.Infof("domains on suffixes block-list: %d", suffix)
 
 	// Add the Plugin to CoreDNS, so Servers can use it in their plugin chain.
+	dd := DonutDNS{sets: sets}
 	dnsserver.GetConfig(c).AddPlugin(func(next plugin.Handler) plugin.Handler {
 		dd.Next = next
 		return dd
@@ -100,28 +84,4 @@ func setup(c *caddy.Controller) error {
 
 	// Plugin loaded okay.
 	return nil
-}
-
-func defaults(set *set.Set[string]) {
-	downloader := fetch.NewDownloader(pLog)
-	s, err := downloader.Download(sources.Defaults())
-	if err != nil {
-		panic(err)
-	}
-	set.InsertSet(s)
-}
-
-func custom(filename string, set *set.Set[string]) {
-	// for now, everything uses the generic domain extractor
-	ex := extract.New(extract.Generic)
-	f, err := os.Open(filename)
-	if err != nil {
-		panic(err)
-	}
-	defer ignore.Close(f)
-	s, err := ex.Extract(f)
-	if err != nil {
-		panic(err)
-	}
-	set.InsertSet(s)
 }

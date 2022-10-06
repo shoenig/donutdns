@@ -7,8 +7,8 @@ import (
 
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/request"
-	"github.com/hashicorp/go-set"
 	"github.com/miekg/dns"
+	"github.com/shoenig/donutdns/sources"
 )
 
 const (
@@ -18,11 +18,7 @@ const (
 
 type DonutDNS struct {
 	Next plugin.Handler
-
-	defaultLists bool
-	suffix       *set.Set[string]
-	block        *set.Set[string]
-	allow        *set.Set[string]
+	sets *sources.Sets
 }
 
 func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
@@ -31,22 +27,22 @@ func (dd DonutDNS) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 	origQuery := state.Name()
 	cleanQuery := strings.Trim(origQuery, ".")
 
-	if dd.allow.Contains(cleanQuery) {
-		pLog.Debugf("query for %s is explicitly allowed", cleanQuery)
+	if dd.sets.Allow(cleanQuery) {
+		pluginLogger.Debugf("query for %s is explicitly allowed", cleanQuery)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
-	if dd.block.Contains(cleanQuery) {
-		pLog.Debugf("query for %s is blocked by match", cleanQuery)
+	if dd.sets.BlockByMatch(cleanQuery) {
+		pluginLogger.Debugf("query for %s is blocked by match", cleanQuery)
 		return dd.null(state.QType(), origQuery, ctx, w, r)
 	}
 
-	if blockBySuffix(dd.suffix, cleanQuery) {
-		pLog.Debugf("query for %s is blocked by suffix", cleanQuery)
+	if dd.sets.BlockBySuffix(cleanQuery) {
+		pluginLogger.Debugf("query for %s is blocked by suffix", cleanQuery)
 		return dd.null(state.QType(), origQuery, ctx, w, r)
 	}
 
-	pLog.Debugf("query for %s is implicitly allowed", cleanQuery)
+	pluginLogger.Debugf("query for %s is implicitly allowed", cleanQuery)
 	return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 }
 
@@ -62,18 +58,18 @@ func (dd DonutDNS) null(qType uint16, query string, ctx context.Context, w dns.R
 	case dns.TypeHTTPS:
 		answers = dd.https(query)
 	default:
-		pLog.Debugf("query: %s type: %s not recognized, fallthrough", query, queryType)
+		pluginLogger.Debugf("query: %s type: %s not recognized, fallthrough", query, queryType)
 		return plugin.NextOrFailure(dd.Name(), dd.Next, ctx, w, r)
 	}
 
-	pLog.Infof("BLOCK query (%s) for %s", queryType, query)
+	pluginLogger.Infof("BLOCK query (%s) for %s", queryType, query)
 
 	m := new(dns.Msg)
 	m.SetReply(r)
 	m.Authoritative = true
 	m.Answer = answers
 	if err := w.WriteMsg(m); err != nil {
-		pLog.Errorf("failed to write msg: %v", err)
+		pluginLogger.Errorf("failed to write msg: %v", err)
 		return dns.RcodeServerFailure, err
 	}
 
