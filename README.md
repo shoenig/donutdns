@@ -142,6 +142,18 @@ example.com
 www.example.com
 ```
 
+## Subcommands
+
+#### check
+
+Use the `check` command to simulate whether a DNS query would be blocked or allowed.
+
+Usage: `donutdns check [-quiet] [-defaults] <domain>`
+
+`-quiet` will suppress verbose debug logging output
+
+`-defaults` will activate the built-in block lists (which is slow)
+
 ## Run
 
 #### as an executable
@@ -249,7 +261,6 @@ EOH
   }
 }
 ```
-  
 </details>
 
 ## Troubleshooting
