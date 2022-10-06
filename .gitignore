@@ -15,4 +15,5 @@
 # vendor/
 
 # Executable
+donutdns
 dist/
