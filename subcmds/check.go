@@ -35,7 +35,7 @@ func (cc *CheckCmd) Synopsis() string {
 
 func (cc *CheckCmd) Usage() string {
 	return strings.TrimPrefix(`
-check <domain>
+check [-quiet] [-defaults] <domain>
 Check whether domain will be blocked.
 `, "\n")
 }
