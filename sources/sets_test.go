@@ -1,4 +1,4 @@
-package donutdns
+package sources
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	"github.com/shoenig/test/must"
 )
 
-func Test_blockBySuffix(t *testing.T) {
+func TestSets_BlockBySuffix(t *testing.T) {
 	suffixes := set.From[string]([]string{"evil.com", "ads.good.com"})
 
 	cases := []struct {
@@ -35,7 +35,8 @@ func Test_blockBySuffix(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.domain, func(t *testing.T) {
-			result := blockBySuffix(suffixes, tc.domain)
+			s := &Sets{suffix: suffixes}
+			result := s.BlockBySuffix(tc.domain)
 			must.Eq(t, tc.exp, result)
 		})
 	}

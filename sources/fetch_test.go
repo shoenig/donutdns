@@ -1,4 +1,4 @@
-package fetch
+package sources
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/coredns/coredns/plugin/pkg/log"
-	"github.com/shoenig/donutdns/sources"
 	"github.com/shoenig/donutdns/sources/extract"
 	"github.com/shoenig/test/must"
 )
@@ -41,7 +40,7 @@ func Test_Download(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	lists := &sources.Lists{
+	lists := &Lists{
 		Suspicious:  []string{ts.URL},
 		Advertising: []string{ts.URL},
 		Tracking:    []string{ts.URL},

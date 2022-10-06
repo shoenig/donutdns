@@ -38,9 +38,9 @@ func (d *Lists) All() []string {
 // The default set of source lists are embedded as statics/sources.json which
 // we then simply unmarshal at runtime.
 func Defaults() *Lists {
-	defaults := new(Lists)
-	if err := json.Unmarshal(sources, defaults); err != nil {
+	lists := new(Lists)
+	if err := json.Unmarshal(sources, lists); err != nil {
 		panic(err) // defaults are embedded
 	}
-	return defaults
+	return lists
 }
