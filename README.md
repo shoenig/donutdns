@@ -1,5 +1,7 @@
 # donutdns
 
+<img align="right" width="240" height="244" src="https://i.imgur.com/1cEeZ3L.png">
+
 Block online ads by intercepting DNS queries
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
