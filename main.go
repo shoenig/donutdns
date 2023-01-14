@@ -48,6 +48,9 @@ func setupCC() {
 	// get core config from environment
 	cc := getCC()
 
+	// sandbox donutdns from filesystem (Linux landlock)
+	agent.Lockdown(cc)
+
 	// set plugin core config
 	dnsserver.Port = strconv.Itoa(cc.Port)
 	dnsserver.Directives = directives
