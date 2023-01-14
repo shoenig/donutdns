@@ -8,7 +8,7 @@ require (
 	github.com/google/subcommands v1.2.0
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/hashicorp/go-set v0.1.6
-	github.com/miekg/dns v1.1.43
+	github.com/miekg/dns v1.1.50
 	github.com/shoenig/extractors v0.3.0
 	github.com/shoenig/ignore v0.4.0
 	github.com/shoenig/test v0.4.0
@@ -34,9 +34,12 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.30.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
-	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
+	golang.org/x/mod v0.4.2 // indirect
+	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985 // indirect
 	golang.org/x/sys v0.0.0-20210908233432-aa78b53d3365 // indirect
 	golang.org/x/text v0.3.6 // indirect
+	golang.org/x/tools v0.1.6-0.20210726203631-07bc1bf47fb2 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto v0.0.0-20210903162649-d08c68adba83 // indirect
 	google.golang.org/grpc v1.40.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
