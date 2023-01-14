@@ -43,3 +43,19 @@ func Test_readable(t *testing.T) {
 		must.SliceContainsAll(t, tc.exp, result)
 	}
 }
+
+func Test_Lockdown(t *testing.T) {
+	t.Run("ok", func(t *testing.T) {
+		err := Lockdown(&CoreConfig{
+			BlockFile: "../hack/social-media.list",
+		})
+		must.NoError(t, err)
+	})
+
+	t.Run("does not exist", func(t *testing.T) {
+		err := Lockdown(&CoreConfig{
+			BlockFile: "/does/not/exist",
+		})
+		must.ErrorContains(t, err, "no such file")
+	})
+}
