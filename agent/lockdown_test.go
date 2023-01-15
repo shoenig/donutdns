@@ -40,11 +40,11 @@ func Test_readable(t *testing.T) {
 			name: "all",
 			cc: &CoreConfig{
 				AllowFile:  "/opt/allows.txt",
-				BlockFile: "/opt/block.txt",
+				BlockFile:  "/opt/block.txt",
 				SuffixFile: "/opt/suffix.txt",
-				AllowDir: "/opt/allow",
+				AllowDir:   "/opt/allow",
 				BlockDir:   "/opt/blocks",
-				SuffixDir: "/opt/suffix",
+				SuffixDir:  "/opt/suffix",
 			},
 			exp: []*landlock.Path{
 				landlock.File("/opt/block.txt", "r"),
@@ -66,7 +66,7 @@ func Test_readable(t *testing.T) {
 func Test_Lockdown(t *testing.T) {
 	t.Run("ok", func(t *testing.T) {
 		err := Lockdown(&CoreConfig{
-			BlockFile: "../hack/social-media.list",
+			BlockFile: "../hack/example.txt",
 		})
 		must.NoError(t, err)
 	})
