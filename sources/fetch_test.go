@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/coredns/coredns/plugin/pkg/log"
+	"github.com/shoenig/donutdns/agent"
 	"github.com/shoenig/donutdns/sources/extract"
 	"github.com/shoenig/test/must"
 )
@@ -26,10 +27,21 @@ func Test_Get(t *testing.T) {
 	defer ts.Close()
 
 	ex := extract.New(extract.Generic)
-	g := NewGetter(pLog, ex)
+	fwd := new(agent.Forward)
+
+	g := NewGetter(pLog, fwd, ex)
 	s, err := g.Get(ts.URL)
 	must.NoError(t, err)
 	must.EqOp(t, 3, s.Size())
+}
+
+func Test_Get_bad_upstream(t *testing.T) {
+	ex := extract.New(extract.Generic)
+	fwd := &agent.Forward{Addresses: []string{"0.0.0.0"}}
+
+	g := NewGetter(pLog, fwd, ex)
+	_, err := g.Get("http://example.com")
+	must.ErrorContains(t, err, "dial tcp: lookup example.com")
 }
 
 func Test_Download(t *testing.T) {
@@ -48,7 +60,9 @@ func Test_Download(t *testing.T) {
 		Miners:      []string{ts.URL},
 	}
 
-	d := NewDownloader(pLog)
+	fwd := new(agent.Forward)
+	d := NewDownloader(fwd, pLog)
+
 	s, err := d.Download(lists)
 	must.NoError(t, err)
 	must.EqOp(t, 3, s.Size())

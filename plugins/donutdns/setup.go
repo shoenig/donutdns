@@ -19,6 +19,7 @@ func Setup(c *caddy.Controller) error {
 
 	// reconstruct the parts of CoreConfig for initializing the allow/block lists
 	cc := new(agent.CoreConfig)
+	cc.Forward = new(agent.Forward)
 
 	for c.Next() {
 		_ = c.RemainingArgs()
@@ -65,6 +66,24 @@ func Setup(c *caddy.Controller) error {
 					return c.ArgErr()
 				}
 				cc.Suffix = append(cc.Suffix, c.Val())
+
+			case "upstream_1":
+				if !c.NextArg() {
+					return c.ArgErr()
+				}
+				cc.Forward.Addresses = append(cc.Forward.Addresses, c.Val())
+
+			case "upstream_2":
+				if !c.NextArg() {
+					return c.ArgErr()
+				}
+				cc.Forward.Addresses = append(cc.Forward.Addresses, c.Val())
+
+			case "forward_server_name":
+				if !c.NextArg() {
+					return c.ArgErr()
+				}
+				cc.Forward.ServerName = c.Val()
 			}
 		}
 	}
@@ -74,6 +93,8 @@ func Setup(c *caddy.Controller) error {
 	pluginLogger.Infof("domains on explicit allow-list: %d", allow)
 	pluginLogger.Infof("domains on explicit block-list: %d", block)
 	pluginLogger.Infof("domains on suffixes block-list: %d", suffix)
+	pluginLogger.Infof("forward upstreams: %v", cc.Forward.Addresses)
+	pluginLogger.Infof("forward name: %s", cc.Forward.ServerName)
 
 	// Add the Plugin to CoreDNS, so Servers can use it in their plugin chain.
 	dd := DonutDNS{sets: sets}

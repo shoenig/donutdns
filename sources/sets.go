@@ -28,7 +28,7 @@ func New(logger output.Logger, cc *agent.CoreConfig) *Sets {
 
 	// initialize defaults if enabled
 	if !cc.NoDefaults {
-		defaults(block, logger)
+		defaults(cc.Forward, block, logger)
 	}
 
 	// insert individual custom allowable domains
@@ -106,8 +106,8 @@ func (s *Sets) BlockBySuffix(domain string) bool {
 	return s.BlockBySuffix(domain[idx+1:])
 }
 
-func defaults(set *set.Set[string], logger output.Logger) {
-	d := NewDownloader(logger)
+func defaults(fwd *agent.Forward, set *set.Set[string], logger output.Logger) {
+	d := NewDownloader(fwd, logger)
 	s, err := d.Download(Defaults())
 	if err != nil {
 		panic(err)

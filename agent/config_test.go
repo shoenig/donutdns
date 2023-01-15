@@ -19,7 +19,7 @@ func TestCoreConfig_Generate(t *testing.T) {
 		BlockFile:  "/etc/block.list",
 		Suffix:     []string{"fb.com", "twitter.com"},
 		SuffixFile: "/etc/suffix.list",
-		Forward: Forward{
+		Forward: &Forward{
 			Addresses:  []string{"1.1.1.1", "1.0.0.1"},
 			ServerName: "cloudflare-dns.com",
 		},
@@ -43,6 +43,10 @@ func TestCoreConfig_Generate(t *testing.T) {
     suffix fb.com
     suffix twitter.com
 
+    upstream_1 1.1.1.1
+    upstream_2 1.0.0.1
+    forward_server_name cloudflare-dns.com
+
   }
   forward . 1.1.1.1 1.0.0.1 {
     tls_servername cloudflare-dns.com
@@ -59,7 +63,7 @@ func TestCoreConfig_Generate_less(t *testing.T) {
 		Allows:     nil,
 		Blocks:     nil,
 		NoDefaults: true,
-		Forward: Forward{
+		Forward: &Forward{
 			Addresses:  []string{"8.8.8.8"},
 			ServerName: "google.dns",
 		},
@@ -72,6 +76,8 @@ func TestCoreConfig_Generate_less(t *testing.T) {
   log
   donutdns {
     defaults false
+    upstream_1 8.8.8.8
+    forward_server_name google.dns
   }
   forward . 8.8.8.8 {
     tls_servername google.dns
@@ -122,7 +128,7 @@ func TestConfigFromEnv(t *testing.T) {
 		SuffixFile: "/etc/suffix.list",
 		SuffixDir:  "/etc/suffixes",
 		NoDefaults: false,
-		Forward: Forward{
+		Forward: &Forward{
 			Addresses:  []string{"8.8.8.8", "8.8.4.4"},
 			ServerName: "dns.google",
 		},
@@ -159,7 +165,7 @@ func TestConfigFromEnv_2(t *testing.T) {
 		Blocks:     []string{"facebook.com"},
 		BlockFile:  "",
 		NoDefaults: true,
-		Forward: Forward{
+		Forward: &Forward{
 			Addresses:  []string{"8.8.8.8"},
 			ServerName: "dns.google",
 		},
