@@ -5,6 +5,7 @@
 Block online ads by intercepting DNS queries
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![CI Tests](https://github.com/shoenig/donutdns/actions/workflows/tests.yaml/badge.svg)](https://github.com/shoenig/donutdns/actions/workflows/tests.yaml)
 
 ## Project Overview
 
@@ -27,7 +28,7 @@ with little to no configuration.
 [INFO] plugin/donutdns: BLOCK query (AAAA) for static.ads-twitter.com.
 ```
 
-## Domain Block Lists
+## Domain Block/Allow Lists
 
 The default set of blocked domains are retrieved from the source lists in [sources.json](sources/statics/sources.json).
 These lists are compiled and maintained by volunteers; see their respective headers
@@ -36,16 +37,16 @@ contribute to these domain block lists.
 
 The blocking of the default set of domains can be disabled by setting `DONUT_DNS_NO_DEFAULT=1`.
 
-Additional domains can be blocked by `donutdns` by setting the `DONUT_DNS_BLOCK` and/or
-`DONUT_DNS_BLOCK_FILE` environment variables.
+Additional domains can be blocked by `donutdns` by setting any of the `DONUT_DNS_BLOCK`,
+`DONUT_DNS_BLOCK_FILE`, `DONUT_DNS_BLOCK_DIR` environment variables.
 
-Likewise, domains can be explicitly allowed by setting the `DONUT_DNS_ALLOW` and/or
-`DONUT_DNS_ALLOW_FILE` environment variables. The allow lists take precedense over
-the block lists.
+Likewise, domains can be explicitly allowed by setting the `DONUT_DNS_ALLOW`,
+`DONUT_DNS_ALLOW_FILE`, `DONUT_DNS_ALLOW_DIR` environment variables. The allow lists 
+take precedense over the block lists.
 
 For nasty companies like Facebook with dynamic subdomains, `donutdns` supports blocking
-domains by suffix matching. By setting `DONUT_DNS_SUFFIX` and/or `DONUT_DNS_SUFFIX_FILE`
-any query matching the given suffix(es) will be blocked.
+domains by suffix matching. By setting any of the `DONUT_DNS_SUFFIX`, `DONUT_DNS_SUFFIX_FILE`,
+`DONUT_DNS_SUFFIX_DIR` any query matching the given suffix(es) will be blocked.
 
 ## Getting Started
 
@@ -76,10 +77,13 @@ The `donutdns` executable uses environment variables for configuration.
 | `DONUT_DNS_NO_LOG` | Disable CoreDNS logging (default unset) |
 | `DONUT_DNS_ALLOW` | Comma separated list of domains to NOT block (default unset) |
 | `DONUT_DNS_ALLOW_FILE` | File with list of domains to NOT block (default unset) |
+| `DONUT_DNS_ALLOW_DIR` | Directory with one or more files of list of domains to NOT block (default unset) |
 | `DONUT_DNS_BLOCK` | Comma separated list of domains to block (default unset) |
 | `DONUT_DNS_BLOCK_FILE` | File with list of domains to block (default unset) |
+| `DONUT_DNS_BLOCK_DIR` | Directory with one or more files of list of domains to block (default unset) |
 | `DONUT_DNS_SUFFIX` | Comma separated list of domains to block by suffix (default unset) |
 | `DONUT_DNS_SUFFIX_FILE` | File with list of domains to block by suffix (default unset) |
+| `DONUT_DNS_SUFFIX_DIR` | Directory with one or more files of list of domains to block by suffix (default unset) |
 | `DONUT_DNS_NO_DEFAULTS` | Disable blocking of default domain block lists (default unset) |
 | `DONUT_DNS_UPSTREAM_1` | Fallback DNS Server for non-blocked queries (default `1.1.1.1`) |
 | `DONUT_DNS_UPSTREAM_2` | Fallback DNS Server for non-blocked queries (default `1.0.0.1`) |
