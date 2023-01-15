@@ -36,7 +36,7 @@ type CoreConfig struct {
 	SuffixFile string
 	SuffixDir  string
 	NoDefaults bool
-	Forward    Forward
+	Forward    *Forward
 }
 
 // Generate a CoreDNS (Caddy) style configuration block as a string.
@@ -63,7 +63,8 @@ func ConfigFromEnv(e env.Environment) *CoreConfig {
 		upstream2 string
 	)
 
-	var cc CoreConfig
+	cc := new(CoreConfig)
+	cc.Forward = new(Forward)
 	if err := env.Parse(e, env.Schema{
 		"DONUT_DNS_PORT":          env.Int(&cc.Port, false),
 		"DONUT_DNS_NO_DEBUG":      env.Bool(&cc.NoDebug, false),
@@ -85,20 +86,18 @@ func ConfigFromEnv(e env.Environment) *CoreConfig {
 		panic(err)
 	}
 
-	var upstreams []string
 	if upstream1 != "" {
-		upstreams = append(upstreams, upstream1)
+		cc.Forward.Addresses = append(cc.Forward.Addresses, upstream1)
 	}
 	if upstream2 != "" {
-		upstreams = append(upstreams, upstream2)
+		cc.Forward.Addresses = append(cc.Forward.Addresses, upstream2)
 	}
-	cc.Forward.Addresses = upstreams
 
 	cc.Allows = split(allow)
 	cc.Blocks = split(block)
 	cc.Suffix = split(suffix)
 
-	return &cc
+	return cc
 }
 
 // Log cc to plog.

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/hashicorp/go-set"
+	"github.com/shoenig/donutdns/agent"
 	"github.com/shoenig/donutdns/output"
 	"github.com/shoenig/donutdns/sources/extract"
 	"github.com/shoenig/ignore"
@@ -17,18 +18,20 @@ type Downloader interface {
 }
 
 type downloader struct {
-	logger output.Logger
+	logger  output.Logger
+	forward *agent.Forward
 }
 
 // NewDownloader creates a new Downloader for downloading source lists.
-func NewDownloader(logger output.Logger) Downloader {
+func NewDownloader(fwd *agent.Forward, logger output.Logger) Downloader {
 	return &downloader{
-		logger: logger,
+		forward: fwd,
+		logger:  logger,
 	}
 }
 
 func (d *downloader) Download(lists *Lists) (*set.Set[string], error) {
-	g := NewGetter(d.logger, extract.New(extract.Generic))
+	g := NewGetter(d.logger, d.forward, extract.New(extract.Generic))
 	combo := set.New[string](100)
 	for _, source := range lists.All() {
 		single, err := g.Get(source)
@@ -54,12 +57,9 @@ type getter struct {
 }
 
 // NewGetter creates a new Getter, using Extractor ex to extract domains.
-func NewGetter(logger output.Logger, ex extract.Extractor) Getter {
+func NewGetter(logger output.Logger, fwd *agent.Forward, ex extract.Extractor) Getter {
 	return &getter{
-		client: client(
-		// todo: pass in one of the upstreams
-		//  currently hard-code cloudflare for bootstrapping the sources
-		),
+		client: client(fwd),
 		ex:     ex,
 		logger: logger,
 	}
