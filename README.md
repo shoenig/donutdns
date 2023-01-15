@@ -70,24 +70,24 @@ go install github.com/shoenig/donutdns@latest
 
 The `donutdns` executable uses environment variables for configuration.
 
-| Environment Variable | Description |
-| -------------------- | ----------- |
-| `DONUT_DNS_PORT` | The port to listen to (default `5301`) |
-| `DONUT_DNS_NO_DEBUG` | Disable CoreDNS debug logging (default unset) |
-| `DONUT_DNS_NO_LOG` | Disable CoreDNS logging (default unset) |
-| `DONUT_DNS_ALLOW` | Comma separated list of domains to NOT block (default unset) |
-| `DONUT_DNS_ALLOW_FILE` | File with list of domains to NOT block (default unset) |
-| `DONUT_DNS_ALLOW_DIR` | Directory with one or more files of list of domains to NOT block (default unset) |
-| `DONUT_DNS_BLOCK` | Comma separated list of domains to block (default unset) |
-| `DONUT_DNS_BLOCK_FILE` | File with list of domains to block (default unset) |
-| `DONUT_DNS_BLOCK_DIR` | Directory with one or more files of list of domains to block (default unset) |
-| `DONUT_DNS_SUFFIX` | Comma separated list of domains to block by suffix (default unset) |
-| `DONUT_DNS_SUFFIX_FILE` | File with list of domains to block by suffix (default unset) |
-| `DONUT_DNS_SUFFIX_DIR` | Directory with one or more files of list of domains to block by suffix (default unset) |
-| `DONUT_DNS_NO_DEFAULTS` | Disable blocking of default domain block lists (default unset) |
-| `DONUT_DNS_UPSTREAM_1` | Fallback DNS Server for non-blocked queries (default `1.1.1.1`) |
-| `DONUT_DNS_UPSTREAM_2` | Fallback DNS Server for non-blocked queries (default `1.0.0.1`) |
-| `DONUT_DNS_UPSTREAM_NAME` | Fallback DNS Server TLS name (default `cloudflare-dns.com`) |
+| Environment Variable | Description | Default |
+| -------------------- | ----------- | ------- |
+| `DONUT_DNS_PORT` | The port to listen on | `5301` |
+| `DONUT_DNS_NO_DEBUG` | Disable CoreDNS debug logging | unset |
+| `DONUT_DNS_NO_LOG` | Disable CoreDNS logging | unset |
+| `DONUT_DNS_ALLOW` | Comma separated list of domains to NOT block | unset |
+| `DONUT_DNS_ALLOW_FILE` | File with list of domains to NOT block | unset |
+| `DONUT_DNS_ALLOW_DIR` | Directory with one or more files of list of domains to NOT block | unset |
+| `DONUT_DNS_BLOCK` | Comma separated list of domains to block | unset |
+| `DONUT_DNS_BLOCK_FILE` | File with list of domains to block | unset |
+| `DONUT_DNS_BLOCK_DIR` | Directory with one or more files of list of domains to block | unset |
+| `DONUT_DNS_SUFFIX` | Comma separated list of domains to block by suffix | unset |
+| `DONUT_DNS_SUFFIX_FILE` | File with list of domains to block by suffix | unset |
+| `DONUT_DNS_SUFFIX_DIR` | Directory with one or more files of list of domains to block by suffix | unset |
+| `DONUT_DNS_NO_DEFAULTS` | Disable blocking of default domain block lists | unset |
+| `DONUT_DNS_UPSTREAM_1` | Fallback DNS Server for non-blocked queries |`1.1.1.1` |
+| `DONUT_DNS_UPSTREAM_2` | Fallback DNS Server for non-blocked queries | `1.0.0.1` |
+| `DONUT_DNS_UPSTREAM_NAME` | Fallback DNS Server TLS name | `cloudflare-dns.com` |
 
 #### CoreDNS Plugin
 
