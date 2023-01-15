@@ -24,16 +24,35 @@ func Test_readable(t *testing.T) {
 			exp:  []*landlock.Path{landlock.File("/opt/blocks.txt", "r")},
 		},
 		{
-			name: "all",
+			name: "mix",
 			cc: &CoreConfig{
 				AllowFile:  "/opt/allows.txt",
-				BlockFile:  "/opt/blocks.txt",
+				BlockDir:   "/opt/blocks",
 				SuffixFile: "/opt/suffix.txt",
 			},
 			exp: []*landlock.Path{
-				landlock.File("/opt/blocks.txt", "r"),
+				landlock.Dir("/opt/blocks", "r"),
 				landlock.File("/opt/allows.txt", "r"),
 				landlock.File("/opt/suffix.txt", "r"),
+			},
+		},
+		{
+			name: "all",
+			cc: &CoreConfig{
+				AllowFile:  "/opt/allows.txt",
+				BlockFile: "/opt/block.txt",
+				SuffixFile: "/opt/suffix.txt",
+				AllowDir: "/opt/allow",
+				BlockDir:   "/opt/blocks",
+				SuffixDir: "/opt/suffix",
+			},
+			exp: []*landlock.Path{
+				landlock.File("/opt/block.txt", "r"),
+				landlock.File("/opt/allows.txt", "r"),
+				landlock.File("/opt/suffix.txt", "r"),
+				landlock.Dir("/opt/blocks", "r"),
+				landlock.Dir("/opt/allow", "r"),
+				landlock.Dir("/opt/suffix", "r"),
 			},
 		},
 	}

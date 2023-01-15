@@ -1,6 +1,10 @@
 package agent
 
-import "github.com/shoenig/go-landlock"
+import (
+	"strings"
+
+	"github.com/shoenig/go-landlock"
+)
 
 func Lockdown(cc *CoreConfig) error {
 	paths := make([]*landlock.Path, 0, 4)
@@ -12,14 +16,20 @@ func Lockdown(cc *CoreConfig) error {
 
 func readable(cc *CoreConfig) []*landlock.Path {
 	var paths []*landlock.Path
-	if cc.AllowFile != "" {
-		paths = append(paths, landlock.File(cc.AllowFile, "r"))
+	add := func(path string, f func(string, string) *landlock.Path) {
+		if nonempty(path) {
+			paths = append(paths, f(path, "r"))
+		}
 	}
-	if cc.BlockFile != "" {
-		paths = append(paths, landlock.File(cc.BlockFile, "r"))
-	}
-	if cc.SuffixFile != "" {
-		paths = append(paths, landlock.File(cc.SuffixFile, "r"))
-	}
+	add(cc.AllowFile, landlock.File)
+	add(cc.BlockFile, landlock.File)
+	add(cc.SuffixFile, landlock.File)
+	add(cc.AllowDir, landlock.Dir)
+	add(cc.BlockDir, landlock.Dir)
+	add(cc.SuffixDir, landlock.Dir)
 	return paths
+}
+
+func nonempty(s string) bool {
+	return strings.TrimSpace(s) != ""
 }

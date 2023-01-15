@@ -1,0 +1,14 @@
+# [twitter]
+ads-twitter.com
+periscope.tv
+pscp.tv
+t.co
+tweetdeck.com
+twimg.com
+twitpic.com
+twitter.co
+twitter.com
+twitterinc.com
+twitteroauth.com
+twitterstat.us
+twttr.com

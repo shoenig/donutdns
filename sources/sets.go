@@ -1,7 +1,9 @@
 package sources
 
 import (
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/hashicorp/go-set"
@@ -33,19 +35,28 @@ func New(logger output.Logger, cc *agent.CoreConfig) *Sets {
 	allow.InsertAll(cc.Allows)
 
 	// insert file of custom allowable domains
-	custom(cc.AllowFile, allow)
+	customFile(cc.AllowFile, allow)
+
+	// insert each file of custom allowable domains
+	customDir(cc.AllowDir, allow)
 
 	// insert individual custom block domains
 	block.InsertAll(cc.Blocks)
 
 	// insert file of custom block domains
-	custom(cc.BlockFile, block)
+	customFile(cc.BlockFile, block)
 
-	// insert individual block domain suffixes
+	// insert each file of custom block domains
+	customDir(cc.BlockDir, block)
+
+	// insert individual domain sufix block
 	suffix.InsertAll(cc.Suffix)
 
-	// insert file of custom block domain suffixes
-	custom(cc.SuffixFile, suffix)
+	// insert file of custom domain suffix blocks
+	customFile(cc.SuffixFile, suffix)
+
+	// insert each file of custom domain suffix blocks
+	customDir(cc.SuffixDir, suffix)
 
 	return &Sets{
 		allow:  allow,
@@ -104,7 +115,7 @@ func defaults(set *set.Set[string], logger output.Logger) {
 	set.InsertSet(s)
 }
 
-func custom(filename string, set *set.Set[string]) {
+func customFile(filename string, set *set.Set[string]) {
 	if filename == "" {
 		return // nothing to do
 	}
@@ -122,4 +133,23 @@ func custom(filename string, set *set.Set[string]) {
 		panic(err)
 	}
 	set.InsertSet(s)
+}
+
+func customDir(dirname string, set *set.Set[string]) {
+	if dirname == "" {
+		return // nothing to do
+	}
+
+	files, err := ioutil.ReadDir(dirname)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+		filename := filepath.Join(dirname, file.Name())
+		customFile(filename, set)
+	}
 }

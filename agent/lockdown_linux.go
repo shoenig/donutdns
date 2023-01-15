@@ -6,6 +6,4 @@ import (
 	"github.com/shoenig/go-landlock"
 )
 
-var sysPaths = []*landlock.Path{
-	landlock.Certs(),
-}
+var sysPaths = []*landlock.Path{landlock.Certs()}
