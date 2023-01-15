@@ -8,7 +8,7 @@ import (
 )
 
 func TestSets_BlockBySuffix(t *testing.T) {
-	suffixes := set.From[string]([]string{"evil.com", "ads.good.com"})
+	suffixes := set.From([]string{"evil.com", "ads.good.com"})
 
 	cases := []struct {
 		domain string
@@ -40,4 +40,36 @@ func TestSets_BlockBySuffix(t *testing.T) {
 			must.Eq(t, tc.exp, result)
 		})
 	}
+}
+
+func Test_customFile(t *testing.T) {
+	t.Run("none", func(t *testing.T) {
+		s := set.New[string](10)
+		customFile("", s)
+		must.Empty(t, s)
+	})
+
+	t.Run("example", func(t *testing.T) {
+		s := set.New[string](10)
+		customFile("../hack/example.txt", s)
+		must.Size(t, 2, s)
+		must.Contains[string](t, "example.com", s)
+		must.Contains[string](t, "sub.example.com", s)
+	})
+}
+
+func Test_customDir(t *testing.T) {
+	t.Run("none", func(t *testing.T) {
+		s := set.New[string](10)
+		customDir("", s)
+		must.Empty(t, s)
+	})
+
+	t.Run("myblocks", func(t *testing.T) {
+		s := set.New[string](10)
+		customDir("../hack/myblocks", s)
+		must.NotEmpty(t, s)
+		must.Contains[string](t, "fb.com", s)
+		must.Contains[string](t, "cnn.com",s)
+	})
 }

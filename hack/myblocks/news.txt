@@ -1,0 +1,6 @@
+# [fox]
+fox.com
+foxnews.com
+
+# [cnn]
+cnn.com 

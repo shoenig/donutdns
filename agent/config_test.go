@@ -95,10 +95,13 @@ func TestConfigFromEnv(t *testing.T) {
 	mEnv.GetenvMock.When("DONUT_DNS_NO_LOG").Then("1")
 	mEnv.GetenvMock.When("DONUT_DNS_ALLOW").Then("example.com,pets.com")
 	mEnv.GetenvMock.When("DONUT_DNS_ALLOW_FILE").Then("/etc/allow.list")
+	mEnv.GetenvMock.When("DONUT_DNS_ALLOW_DIR").Then("/etc/allows")
 	mEnv.GetenvMock.When("DONUT_DNS_BLOCK").Then("facebook.com,reddit.com")
 	mEnv.GetenvMock.When("DONUT_DNS_BLOCK_FILE").Then("/etc/block.list")
+	mEnv.GetenvMock.When("DONUT_DNS_BLOCK_DIR").Then("/etc/blocks")
 	mEnv.GetenvMock.When("DONUT_DNS_SUFFIX").Then("fb.com,twitter.com")
 	mEnv.GetenvMock.When("DONUT_DNS_SUFFIX_FILE").Then("/etc/suffix.list")
+	mEnv.GetenvMock.When("DONUT_DNS_SUFFIX_DIR").Then("/etc/suffixes")
 	mEnv.GetenvMock.When("DONUT_DNS_NO_DEFAULTS").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_UPSTREAM_1").Then("8.8.8.8")
 	mEnv.GetenvMock.When("DONUT_DNS_UPSTREAM_2").Then("8.8.4.4")
@@ -111,10 +114,13 @@ func TestConfigFromEnv(t *testing.T) {
 		NoLog:      true,
 		Allows:     []string{"example.com", "pets.com"},
 		AllowFile:  "/etc/allow.list",
+		AllowDir:   "/etc/allows",
 		Blocks:     []string{"facebook.com", "reddit.com"},
 		BlockFile:  "/etc/block.list",
+		BlockDir:   "/etc/blocks",
 		Suffix:     []string{"fb.com", "twitter.com"},
 		SuffixFile: "/etc/suffix.list",
+		SuffixDir:  "/etc/suffixes",
 		NoDefaults: false,
 		Forward: Forward{
 			Addresses:  []string{"8.8.8.8", "8.8.4.4"},
@@ -132,10 +138,13 @@ func TestConfigFromEnv_2(t *testing.T) {
 	mEnv.GetenvMock.When("DONUT_DNS_NO_LOG").Then("true")
 	mEnv.GetenvMock.When("DONUT_DNS_ALLOW").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_ALLOW_FILE").Then("")
+	mEnv.GetenvMock.When("DONUT_DNS_ALLOW_DIR").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_BLOCK").Then("facebook.com")
 	mEnv.GetenvMock.When("DONUT_DNS_BLOCK_FILE").Then("")
+	mEnv.GetenvMock.When("DONUT_DNS_BLOCK_DIR").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_SUFFIX").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_SUFFIX_FILE").Then("")
+	mEnv.GetenvMock.When("DONUT_DNS_SUFFIX_DIR").Then("")
 	mEnv.GetenvMock.When("DONUT_DNS_NO_DEFAULTS").Then("true")
 	mEnv.GetenvMock.When("DONUT_DNS_UPSTREAM_1").Then("8.8.8.8")
 	mEnv.GetenvMock.When("DONUT_DNS_UPSTREAM_2").Then("")
