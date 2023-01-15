@@ -6,6 +6,11 @@
     {{if .AllowFile}}allow_file {{.AllowFile}}{{end}}
     {{if .BlockFile}}block_file {{.BlockFile}}{{end}}
     {{if .SuffixFile}}suffix_file {{.SuffixFile}}{{end}}
+
+    {{if .AllowDir}}allow_dir {{.AllowDir}}{{end}}
+    {{if .BlockDir}}block_dir {{.BlockDir}}{{end}}
+    {{if .SuffixDir}}suffix_dir {{.SuffixDir}}{{end}}
+
     {{range .Allows}}allow {{.}}
     {{end}}
     {{range .Blocks}}block {{.}}

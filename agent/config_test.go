@@ -15,10 +15,13 @@ func TestCoreConfig_Generate(t *testing.T) {
 		NoLog:      true,
 		Allows:     []string{"example.com", "pets.com"},
 		AllowFile:  "/etc/allow.list",
+		AllowDir:   "/etc/allows",
 		Blocks:     []string{"facebook.com", "instagram.com"},
 		BlockFile:  "/etc/block.list",
+		BlockDir:   "/etc/blocks",
 		Suffix:     []string{"fb.com", "twitter.com"},
 		SuffixFile: "/etc/suffix.list",
+		SuffixDir:  "/etc/suffixes",
 		Forward: &Forward{
 			Addresses:  []string{"1.1.1.1", "1.0.0.1"},
 			ServerName: "cloudflare-dns.com",
@@ -26,13 +29,17 @@ func TestCoreConfig_Generate(t *testing.T) {
 	}
 
 	result := cc.Generate()
-	must.EqOp(t, noWhitespace(`
+	must.Eq(t, noWhitespace(`
 .:1053 {
   donutdns {
     defaults true
     allow_file /etc/allow.list
     block_file /etc/block.list
     suffix_file /etc/suffix.list
+
+    allow_dir /etc/allows
+    block_dir /etc/blocks
+    suffix_dir /etc/suffixes
 
     allow example.com
     allow pets.com
@@ -70,7 +77,7 @@ func TestCoreConfig_Generate_less(t *testing.T) {
 	}
 
 	result := cc.Generate()
-	must.EqOp(t, noWhitespace(`
+	must.Eq(t, noWhitespace(`
 .:1054 {
   debug
   log

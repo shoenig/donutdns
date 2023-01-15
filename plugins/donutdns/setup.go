@@ -90,9 +90,9 @@ func Setup(c *caddy.Controller) error {
 
 	sets := sources.New(pluginLogger, cc)
 	allow, block, suffix := sets.Size()
-	pluginLogger.Infof("domains on explicit allow-list: %d", allow)
-	pluginLogger.Infof("domains on explicit block-list: %d", block)
-	pluginLogger.Infof("domains on suffixes block-list: %d", suffix)
+	pluginLogger.Infof("domains on explicit allow-list(s): %d", allow)
+	pluginLogger.Infof("domains on explicit block-list(s): %d", block)
+	pluginLogger.Infof("domains on suffixes block-list(s): %d", suffix)
 	pluginLogger.Infof("forward upstreams: %v", cc.Forward.Addresses)
 	pluginLogger.Infof("forward name: %s", cc.Forward.ServerName)
 
