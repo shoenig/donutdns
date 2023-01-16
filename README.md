@@ -207,6 +207,14 @@ sudo systemctl start donutdns          # start donutdns service in systemd
 sudo systemctl status donutdns         # inspect status of donutdns service in systemd
 ```
 
+#### bind to port 53
+
+When running as non-root user, we must set CAP_NET_BIND on the donutdns binary.
+
+```
+sudo setcap CAP_NET_BIND_service+eip /opt/bin/donutdns
+```
+
 #### as a docker container
 
 `donutdns` is available from [Docker Hub](https://hub.docker.com/repository/docker/shoenig/donutdns/general)
