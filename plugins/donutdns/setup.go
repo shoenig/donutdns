@@ -31,6 +31,24 @@ func Setup(c *caddy.Controller) error {
 				}
 				cc.NoDefaults = c.Val() == "false"
 
+			case "allow_dir":
+				if !c.NextArg() {
+					return c.ArgErr()
+				}
+				cc.AllowDir = c.Val()
+
+			case "block_dir":
+				if !c.NextArg() {
+					return c.ArgErr()
+				}
+				cc.BlockDir = c.Val()
+
+			case "suffix_dir":
+				if !c.NextArg() {
+					return c.ArgErr()
+				}
+				cc.SuffixDir = c.Val()
+
 			case "allow_file":
 				if !c.NextArg() {
 					return c.ArgErr()
