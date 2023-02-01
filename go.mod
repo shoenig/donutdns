@@ -12,7 +12,7 @@ require (
 	github.com/shoenig/extractors v0.3.0
 	github.com/shoenig/go-landlock v0.1.4
 	github.com/shoenig/ignore v0.4.0
-	github.com/shoenig/test v0.6.0
+	github.com/shoenig/test v0.6.1
 )
 
 require (
@@ -25,7 +25,7 @@ require (
 	github.com/flynn/go-shlex v0.0.0-20150515145356-3f9db97f8568 // indirect
 	github.com/gojuno/minimock/v3 v3.0.10 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/go-cmp v0.5.8 // indirect
+	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
