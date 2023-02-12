@@ -183,6 +183,18 @@ The [donutdns.service](donutdns.service) file provides an example Systemd Servic
 donutdns via systemd.
 
 ```
+● donutdns.service - Block ads, trackers, and malicioius sites using DonutDNS.
+     Loaded: loaded (/etc/systemd/system/donutdns.service; enabled; preset: enabled)
+     Active: active (running) since Sun 2023-02-12 05:09:45 UTC; 13s ago
+   Main PID: 8117 (donutdns)
+      Tasks: 17 (limit: 18269)
+     Memory: 36.1M (max: 42.0M available: 5.8M)
+        CPU: 1.428s
+     CGroup: /system.slice/donutdns.service
+             └─8117 /opt/bin/donutdns
+```
+
+```
 # A minimal unit file, see donutdns.service for more.
 
 [Unit]
