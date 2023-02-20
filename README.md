@@ -296,6 +296,14 @@ difficult. On my homelab CentOS 9 system I had to disable ipv6 at the kernel lev
 SELinux, and disable firewalld. You may need to do something similar (ideally updating rules
 rather than disabling things) on your system.
 
+### ubuntu 22.04
+
+Need to disable `systemd-resolved` first, which binds to `:53` out of the box.
+```
+sudo systemctl disable systemd-resolved
+sudo systemctl stop systemd-resolved
+```
+
 ## Contributing
 
 The `github.com/shoenig/donutdns` module is always improving with new features
