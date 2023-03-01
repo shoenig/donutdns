@@ -7,7 +7,7 @@ require (
 	github.com/coredns/coredns v1.10.0
 	github.com/google/subcommands v1.2.0
 	github.com/hashicorp/go-cleanhttp v0.5.2
-	github.com/hashicorp/go-set v0.1.8
+	github.com/hashicorp/go-set v0.1.9
 	github.com/miekg/dns v1.1.50
 	github.com/shoenig/extractors v0.3.0
 	github.com/shoenig/go-landlock v0.1.5

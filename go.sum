@@ -160,8 +160,8 @@ github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645 h1
 github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645/go.mod h1:6iZfnjpejD4L/4DwD7NryNaJyCQdzwWwH2MWhCA90Kw=
 github.com/hashicorp/go-cleanhttp v0.5.2 h1:035FKYIWjmULyFRBKPs8TBQoi0x6d9G4xc9neXJWAZQ=
 github.com/hashicorp/go-cleanhttp v0.5.2/go.mod h1:kO/YDlP8L1346E6Sodw+PrpBSV4/SoxCXGY6BqNFT48=
-github.com/hashicorp/go-set v0.1.8 h1:q2r58lFkJrikmC4I+vS3A+bn6QgR7EYeFD8kRiAIAnk=
-github.com/hashicorp/go-set v0.1.8/go.mod h1:wedp+UE6HoxBywExd7mrdGdcXOo3awtiELmnRnpzsKI=
+github.com/hashicorp/go-set v0.1.9 h1:XuQSsDfOAvgRjoKWG2qg8NxVEQJMXGdrZh8BgX6O8n4=
+github.com/hashicorp/go-set v0.1.9/go.mod h1:/IR7VHUqnKI+QfKkaMjZ575bf65Y8DzHRKnOobRpNcQ=
 github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hexdigest/gowrap v1.1.7/go.mod h1:Z+nBFUDLa01iaNM+/jzoOA1JJ7sm51rnYFauKFUB5fs=
