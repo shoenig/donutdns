@@ -5,7 +5,7 @@
 Block online ads by intercepting DNS queries
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![CI Tests](https://github.com/shoenig/donutdns/actions/workflows/tests.yaml/badge.svg)](https://github.com/shoenig/donutdns/actions/workflows/tests.yaml)
+[![Run CI Tests](https://github.com/shoenig/donutdns/actions/workflows/ci.yaml/badge.svg)](https://github.com/shoenig/donutdns/actions/workflows/ci.yaml)
 
 ## Project Overview
 
