@@ -16,7 +16,6 @@ var pluginLogger = log.NewWithPlugin(PluginName)
 //
 // todo: test with TestController
 func Setup(c *caddy.Controller) error {
-
 	// reconstruct the parts of CoreConfig for initializing the allow/block lists
 	cc := new(agent.CoreConfig)
 	cc.Forward = new(agent.Forward)

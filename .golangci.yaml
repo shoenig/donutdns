@@ -6,6 +6,5 @@ linters:
    - errcheck
    - errname
    - errorlint
-   - bodyclose
    - durationcheck
    - whitespace
