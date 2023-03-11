@@ -1,0 +1,10 @@
+# blocklists.d
+#
+# This is the set of custom domain blocks `@shoenig` uses.
+#
+# Copy this somewhere (e.g. /etc/blocklists.d) and use the
+# DONUT_DNS_SUFFIX_DIR environment variable to load all block
+# files in the directory.
+#
+# Feel free to open PRs with other trashy sites.
+
