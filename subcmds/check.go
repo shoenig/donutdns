@@ -19,7 +19,6 @@ const (
 type CheckCmd struct {
 	quiet    bool
 	defaults bool
-	domain   string
 }
 
 func NewCheckCmd() subcommands.Command {
