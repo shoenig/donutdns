@@ -201,8 +201,13 @@ donutdns via systemd.
 Description=Block ads, trackers, and malicioius sites using DonutDNS.
 
 [Service]
+Type=simple
+User=nobody
 ExecStart=/opt/bin/donutdns
 Environment=DONUT_DNS_PORT=53
+Environment=DONUT_DNS_SUFFIX_DIR=/etc/blocklists.d
+MemoryMax=128M
+CPUWeight=90
 
 [Install]
 WantedBy=multi-user.target
@@ -233,7 +238,7 @@ sudo setcap CAP_NET_BIND_service+eip /opt/bin/donutdns
 
 This will run the `donutdns` Docker container as the `nobody` user, mapping traffic from port 53. 
 ```
-docker run --rm -p 53:5301 -u nobody shoenig/donutdns:v0.2.0
+docker run --rm -p 53:5301 -u nobody shoenig/donutdns:v0.3.2
 ```
 
 #### as a Nomad job
@@ -270,7 +275,7 @@ job "donutdns" {
       }
 
       config {
-        image = "shoenig/donutdns:v0.1.2"
+        image = "shoenig/donutdns:v0.3.2"
       }
 
       template {

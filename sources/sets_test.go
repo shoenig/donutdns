@@ -67,9 +67,9 @@ func Test_customDir(t *testing.T) {
 
 	t.Run("myblocks", func(t *testing.T) {
 		s := set.New[string](10)
-		customDir("../hack/myblocks", s)
+		customDir("../blocklists.d", s)
 		must.NotEmpty(t, s)
 		must.Contains[string](t, "fb.com", s)
-		must.Contains[string](t, "cnn.com",s)
+		must.Contains[string](t, "cnn.com", s)
 	})
 }
