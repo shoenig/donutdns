@@ -3,6 +3,7 @@ package sources
 import (
 	"fmt"
 	"net/http"
+	"runtime"
 
 	"github.com/hashicorp/go-set"
 	"github.com/shoenig/donutdns/agent"
@@ -65,12 +66,17 @@ func NewGetter(logger output.Logger, fwd *agent.Forward, ex extract.Extractor) G
 	}
 }
 
+// ua returns a custom user agent with go version
+func ua() string {
+	return fmt.Sprintf("donutdns; %s", runtime.Version())
+}
+
 func (g *getter) Get(source string) (*set.Set[string], error) {
 	request, err := http.NewRequest(http.MethodGet, source, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
-	request.Header.Set("User-Agent", "donutdns")
+	request.Header.Set("User-Agent", ua())
 
 	response, err := g.client.Do(request)
 	if err != nil {
