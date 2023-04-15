@@ -1,7 +1,6 @@
 package sources
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -32,7 +31,7 @@ func New(logger output.Logger, cc *agent.CoreConfig) *Sets {
 	}
 
 	// insert individual custom allowable domains
-	allow.InsertAll(cc.Allows)
+	allow.InsertSlice(cc.Allows)
 
 	// insert file of custom allowable domains
 	customFile(cc.AllowFile, allow)
@@ -41,7 +40,7 @@ func New(logger output.Logger, cc *agent.CoreConfig) *Sets {
 	customDir(cc.AllowDir, allow)
 
 	// insert individual custom block domains
-	block.InsertAll(cc.Blocks)
+	block.InsertSlice(cc.Blocks)
 
 	// insert file of custom block domains
 	customFile(cc.BlockFile, block)
@@ -50,7 +49,7 @@ func New(logger output.Logger, cc *agent.CoreConfig) *Sets {
 	customDir(cc.BlockDir, block)
 
 	// insert individual domain sufix block
-	suffix.InsertAll(cc.Suffix)
+	suffix.InsertSlice(cc.Suffix)
 
 	// insert file of custom domain suffix blocks
 	customFile(cc.SuffixFile, suffix)
@@ -140,7 +139,7 @@ func customDir(dirname string, set *set.Set[string]) {
 		return // nothing to do
 	}
 
-	files, err := ioutil.ReadDir(dirname)
+	files, err := os.ReadDir(dirname)
 	if err != nil {
 		panic(err)
 	}
