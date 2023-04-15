@@ -4,10 +4,15 @@ before:
 builds:
   - env:
       - CGO_ENABLED=0
+    goarch:
+      - amd64
+      - arm64
     goos:
       - linux
       - windows
       - darwin
+      - freebsd
+      - openbsd
 checksum:
   name_template: 'checksums.txt'
 snapshot:
