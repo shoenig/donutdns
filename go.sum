@@ -43,8 +43,8 @@ github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645 h1
 github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645/go.mod h1:6iZfnjpejD4L/4DwD7NryNaJyCQdzwWwH2MWhCA90Kw=
 github.com/hashicorp/go-cleanhttp v0.5.2 h1:035FKYIWjmULyFRBKPs8TBQoi0x6d9G4xc9neXJWAZQ=
 github.com/hashicorp/go-cleanhttp v0.5.2/go.mod h1:kO/YDlP8L1346E6Sodw+PrpBSV4/SoxCXGY6BqNFT48=
-github.com/hashicorp/go-set v0.1.12 h1:ghg3RoSWfRkP6efWp6w7pcjPs478/i/vFLwVOJt4I0I=
-github.com/hashicorp/go-set v0.1.12/go.mod h1:BaYYjrI6m7H3D0j+N5Z0rZkCbBXOgNtuoDHrMJfORsk=
+github.com/hashicorp/go-set v0.1.13 h1:k1B5goY3c7OKEzpK+gwAhJexxzAJwDN8kId8YvWrihA=
+github.com/hashicorp/go-set v0.1.13/go.mod h1:0/D+R4MFUzJ6XmvjU7liXtznF1eQDxh84GJlhXw+lvo=
 github.com/matttproud/golang_protobuf_extensions v1.0.4 h1:mmDVorXM7PCGKw94cs5zkfA9PSy5pEvNWRP0ET0TIVo=
 github.com/matttproud/golang_protobuf_extensions v1.0.4/go.mod h1:BSXmuO+STAnVfrANrmjBb36TMTDstsz7MSK+HVaYKv4=
 github.com/miekg/dns v1.1.31/go.mod h1:KNUDUusw/aVsxyTYZM1oqvCicbwhgbNgztCETuNZ7xM=
