@@ -2,11 +2,11 @@ NAME = donutdns
 
 .PHONY: build
 build: clean
-	CGO_ENABLED=0 go build -o output/$(NAME)
+	CGO_ENABLED=0 go build -o $(NAME)
 
 .PHONY: clean
 clean:
-	rm -rf dist output/$(NAME)
+	rm -rf dist $(NAME)
 
 .PHONY: test
 test:
