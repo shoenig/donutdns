@@ -37,6 +37,7 @@ type CoreConfig struct {
 	SuffixDir  string
 	NoDefaults bool
 	Forward    *Forward
+	NoLandlock bool
 }
 
 // Generate a CoreDNS (Caddy) style configuration block as a string.
@@ -82,6 +83,7 @@ func ConfigFromEnv(e env.Environment) *CoreConfig {
 		"DONUT_DNS_UPSTREAM_1":    env.String(&upstream1, false),
 		"DONUT_DNS_UPSTREAM_2":    env.String(&upstream2, false),
 		"DONUT_DNS_UPSTREAM_NAME": env.String(&cc.Forward.ServerName, false),
+		"DONUT_DNS_NO_LANDLOCK":   env.Bool(&cc.NoLandlock, false),
 	}); err != nil {
 		panic(err)
 	}
